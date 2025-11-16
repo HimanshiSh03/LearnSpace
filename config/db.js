@@ -1,14 +1,9 @@
 const mongoose = require('mongoose');
 
 const connectToDB = async () => {
-  try {
-    console.log('Connecting to:', process.env.MONGO_URI); // 🧪 add this to debug
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('MongoDB connected');
-  } catch (err) {
-    console.error('MongoDB connection error:', err.message);
-    process.exit(1);
-  }
+  console.log('Skipping MongoDB connection - using in-memory storage for demonstration');
+  // For demo purposes, we're not connecting to MongoDB
+  // In a production environment, you would connect to MongoDB here
 };
 
 module.exports = connectToDB;

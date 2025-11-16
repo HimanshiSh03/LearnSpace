@@ -15,6 +15,13 @@ const TaskSchema = new mongoose.Schema({
     enum: ["Low", "Medium", "High"], 
     default: "Medium" 
   },
+  // Contributor tracking fields
+  contributor: { type: String, default: "" },
+  taskLevel: { 
+    type: Number, 
+    enum: [1, 2, 3], 
+    default: 1 
+  },
 }, { timestamps: true }); // Added timestamps for created/updated dates (optional but good practice)
 
 module.exports = mongoose.model("Task", TaskSchema); // Changed from export default to module.exports

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Leaderboard from "../components/Leaderboard";
 
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000';
 
@@ -150,6 +151,11 @@ const Dashboard = () => {
           <div className="mt-2 text-sm text-gray-600">
             {stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0}% completed
           </div>
+        </div>
+        
+        {/* Contributor Leaderboard */}
+        <div className="mt-8">
+          <Leaderboard />
         </div>
       </div>
     </div>

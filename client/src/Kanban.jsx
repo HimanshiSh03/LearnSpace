@@ -23,6 +23,9 @@ const Kanban = () => {
 
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingTitle, setEditingTitle] = useState("");
+  const [assigningContributor, setAssigningContributor] = useState(null);
+  const [contributorName, setContributorName] = useState("");
+  const [taskLevel, setTaskLevel] = useState(1);
 
   // FETCH ALL TASKS ON COMPONENT MOUNT
 useEffect(() => {
@@ -126,6 +129,55 @@ useEffect(() => {
     }
   };
 
+  // ASSIGN CONTRIBUTOR AND UPDATE POINTS
+  const handleAssignContributor = async (id) => {
+    if (!contributorName.trim()) return;
+
+    try {
+      // Update task with contributor info
+      const res = await fetch(`${API_URL}/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          contributor: contributorName,
+          taskLevel: taskLevel,
+          status: "done"
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(`HTTP error! Status: ${res.status}, Message: ${errorData.message || 'Unknown error'}`);
+      }
+
+      // Update contributor points
+      const pointsRes = await fetch(`${API_URL}/api/contributors/updatePoints`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          contributorName: contributorName,
+          taskLevel: taskLevel,
+          taskId: id
+        }),
+      });
+
+      if (!pointsRes.ok) {
+        const errorData = await pointsRes.json();
+        throw new Error(`HTTP error! Status: ${pointsRes.status}, Message: ${errorData.message || 'Unknown error'}`);
+      }
+
+      const updatedTask = await res.json();
+      setTasks((prev) =>
+        prev.map((task) => (task._id === id ? updatedTask : task))
+      );
+
+      setAssigningContributor(null);
+      setContributorName("");
+      setTaskLevel(1);
+    } catch (error) {
+      console.error("Error assigning contributor:", error);
+    }
+  };
   // HANDLE DRAG AND DROP
   const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
@@ -294,6 +346,44 @@ useEffect(() => {
                                   ❌
                                 </button>
                               </>
+                            ) : assigningContributor === task._id ? (
+                              <>
+                                <div className="flex-1">
+                                  <input
+                                    type="text"
+                                    value={contributorName}
+                                    onChange={(e) => setContributorName(e.target.value)}
+                                    placeholder="Contributor name"
+                                    className="p-2 border rounded w-full mb-2"
+                                  />
+                                  <select
+                                    value={taskLevel}
+                                    onChange={(e) => setTaskLevel(parseInt(e.target.value))}
+                                    className="p-2 border rounded w-full mb-2"
+                                  >
+                                    <option value={1}>Level 1 (2 points)</option>
+                                    <option value={2}>Level 2 (5 points)</option>
+                                    <option value={3}>Level 3 (11 points)</option>
+                                  </select>
+                                </div>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => handleAssignContributor(task._id)}
+                                    className="text-green-600 font-bold mr-2"
+                                  >
+                                    ✅
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setAssigningContributor(null);
+                                      setContributorName("");
+                                    }}
+                                    className="text-gray-600 font-bold"
+                                  >
+                                    ❌
+                                  </button>
+                                </div>
+                              </>
                             ) : (
                               <>
                                 {/* Display Title */}
@@ -315,6 +405,14 @@ useEffect(() => {
                                     `}>
                                         Priority: {task.priority || 'Medium'}
                                     </p>
+                                    {/* Display Contributor and Task Level */}
+                                    {task.contributor && (
+                                      <p className="text-gray-500 text-xs mt-1">
+                                        Contributor: <span className="font-medium">{task.contributor}</span> | 
+                                        Level: <span className="font-medium">{task.taskLevel}</span> | 
+                                        Points: <span className="font-medium">{task.taskLevel === 1 ? 2 : task.taskLevel === 2 ? 5 : 11}</span>
+                                      </p>
+                                    )}
                                 </div>
                                 <div className="flex gap-2">
                                   <button
@@ -326,6 +424,18 @@ useEffect(() => {
                                   >
                                     ✏️
                                   </button>
+                                  {task.status === 'done' && !task.contributor && (
+                                    <button
+                                      onClick={() => {
+                                        setAssigningContributor(task._id);
+                                        setContributorName("");
+                                        setTaskLevel(1);
+                                      }}
+                                      className="text-purple-600"
+                                    >
+                                      🏆
+                                  </button>
+                                  )}
                                   <button
                                     onClick={() => handleDeleteTask(task._id)}
                                     className="text-red-600"

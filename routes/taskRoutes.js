@@ -52,7 +52,7 @@ router.get("/", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { title } = req.body;
+    const { title, status, description, assignedUser, priority, contributor, taskLevel } = req.body;
 
     if (title !== undefined && title.trim() === '') {
         return res.status(400).json({ message: "Task title cannot be empty." });
@@ -71,7 +71,17 @@ router.patch("/:id", async (req, res) => {
         }
     }
 
-    const task = await Task.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+    // Prepare update object
+    const updateFields = {};
+    if (title !== undefined) updateFields.title = title;
+    if (status !== undefined) updateFields.status = status;
+    if (description !== undefined) updateFields.description = description;
+    if (assignedUser !== undefined) updateFields.assignedUser = assignedUser;
+    if (priority !== undefined) updateFields.priority = priority;
+    if (contributor !== undefined) updateFields.contributor = contributor;
+    if (taskLevel !== undefined) updateFields.taskLevel = taskLevel;
+
+    const task = await Task.findByIdAndUpdate(id, updateFields, { new: true, runValidators: true });
     
     if (!task) {
       return res.status(404).json({ message: "Task not found" });

@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const userRouter = require('./routes/user.routes');
 const taskRoutes = require("./routes/taskRoutes");
+const contributorRoutes = require("./routes/contributorRoutes");
 const cookieParser = require('cookie-parser');
 
 
@@ -39,6 +40,7 @@ app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
 // Routes
 app.use('/user', userRouter); // Authentication routes (register, login)
 app.use('/api/tasks', taskRoutes); // Task CRUD routes
+app.use('/api/contributors', contributorRoutes); // Contributor leaderboard routes
 
 // A simple test route to confirm the server starts
 app.get('/', (req, res) => {

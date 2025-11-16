@@ -8,6 +8,13 @@ const TaskSchema = new mongoose.Schema({
     enum: ["todo", "inprogress", "done"],
     default: "todo",
   },
+  description: { type: String, default: "" },
+  assignedUser: { type: String, default: "Unassigned" },
+  priority: { 
+    type: String, 
+    enum: ["Low", "Medium", "High"], 
+    default: "Medium" 
+  },
 }, { timestamps: true }); // Added timestamps for created/updated dates (optional but good practice)
 
 module.exports = mongoose.model("Task", TaskSchema); // Changed from export default to module.exports

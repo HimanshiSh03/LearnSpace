@@ -174,7 +174,15 @@ useEffect(() => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-center mb-8">TASK MANAGER</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">TASK MANAGER</h1>
+        <a 
+          href="/dashboard" 
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200"
+        >
+          Dashboard
+        </a>
+      </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex flex-col md:flex-row justify-center gap-6"> {/* Updated for responsiveness */}

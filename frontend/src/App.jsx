@@ -1,10 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Kanban from "./Kanban";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import LeaderboardPage from "./pages/LeaderboardPage";
-import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+
+
 
 //  Route Guard using localStorage
 const ProtectedRoute = ({ children }) => {
@@ -19,13 +17,11 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-100">
-        <Navbar />
+    
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/" element={<Home />} />   
+          
+          
 
           {/* Kanban route - no longer protected */}
           <Route

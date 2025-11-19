@@ -1,0 +1,90 @@
+
+@import "tailwindcss";
+/* LearnSpace Theme Background */
+.learnspace-bg {
+  background: radial-gradient(circle at 20% 20%, #dbe4ff, #ffffff 60%);
+  position: relative;
+}
+
+.learnspace-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://grainy-gradients.vercel.app/noise.png");
+  opacity: 0.2;
+  pointer-events: none;
+}
+/* --- AnimateItNow Premium Background --- */
+
+.learnspace-bg {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 30%, #e0e7ff, #ffffff 60%);
+}
+
+/* Grain */
+.learnspace-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://grainy-gradients.vercel.app/noise.png");
+  opacity: 0.25;
+  mix-blend-mode: soft-light;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Soft glowing blob 1 */
+.learnspace-bg::after {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99,102,241,0.35), transparent 70%);
+  top: -200px;
+  right: -150px;
+  filter: blur(100px);
+  animation: float1 12s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating blob left */
+.glow-left {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168,85,247,0.25), transparent 70%);
+  bottom: -150px;
+  left: -150px;
+  filter: blur(120px);
+  animation: float2 14s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Animation */
+@keyframes float1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-80px, 60px) scale(1.15); }
+}
+
+@keyframes float2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(90px, -70px) scale(1.2); }
+}
+
+/* Glass card effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+  transition: 0.25s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  border-color: rgba(255,255,255,0.8);
+}
+

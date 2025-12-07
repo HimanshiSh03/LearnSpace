@@ -1,3 +1,4 @@
+/* 🔥 Theme Variables */
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
@@ -8,7 +9,17 @@
   --text-color: #ffffff;
 }
 
+/* 🔥 Base Styles */
 body {
   background: var(--bg-color);
   color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, Arial, sans-serif;
+}
+
+/* If your main branch had styles, add them below safely */
+#root {
+  min-height: 100vh;
+  width: 100%;
 }

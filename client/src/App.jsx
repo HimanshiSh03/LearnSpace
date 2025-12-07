@@ -38,17 +38,19 @@ function App() {
 
   return (
     <Router>
-      {/* Navbar gets theme + toggle function */}
+      {/* Navbar receives theme + toggle function */}
       <Navbar theme={theme} toggleTheme={toggleTheme} />
 
       <Routes>
-
+        {/* Default redirect */}
         <Route path="/" element={<Navigate to="/register" replace />} />
 
+        {/* Public routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contributors" element={<Contributors />} />
 
+        {/* Protected route */}
         <Route
           path="/kanban"
           element={
@@ -58,6 +60,7 @@ function App() {
           }
         />
 
+        {/* Catch all */}
         <Route path="*" element={<Navigate to="/register" replace />} />
       </Routes>
     </Router>

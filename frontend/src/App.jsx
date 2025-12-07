@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Kanban from "./Kanban";
 import Home from "./pages/Home";
+import Books from "./pages/Books";
 import Whiteboard from "./components/Whiteboard"; // Added Whiteboard import
 
 
@@ -30,6 +31,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <Kanban />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Books route */}
+          <Route
+            path="/books"
+            element={
+              <ProtectedRoute>
+                <Books />
               </ProtectedRoute>
             }
           />

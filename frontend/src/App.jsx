@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Kanban from "./Kanban";
 import Home from "./pages/Home";
-import Whiteboard from "./components/Whiteboard"; // Added Whiteboard import
+import Whiteboard from "./components/Whiteboard";
+import Contributors from "./pages/Contributors";
 
 
 
@@ -30,6 +31,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <Kanban />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Contributors route */}
+          <Route
+            path="/contributors"
+            element={
+              <ProtectedRoute>
+                <Contributors />
               </ProtectedRoute>
             }
           />

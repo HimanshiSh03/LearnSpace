@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Kanban from "./Kanban";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
-import BookPreview from "./pages/BookPreview";
 import Whiteboard from "./components/Whiteboard"; // Added Whiteboard import
 
 
@@ -42,16 +41,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <Books />
-              </ProtectedRoute>
-            }
-          />
-          
-          {/* Book Preview route */}
-          <Route
-            path="/book/:id"
-            element={
-              <ProtectedRoute>
-                <BookPreview />
               </ProtectedRoute>
             }
           />

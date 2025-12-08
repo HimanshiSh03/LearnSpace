@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, BookOpen, Bookmark, Star, Filter, Eye } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Search, BookOpen, Bookmark, Star, Filter } from "lucide-react";
 
 const Books = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,8 +17,7 @@ const Books = () => {
       description: "A handbook of agile software craftsmanship.",
       cover: "https://images-na.ssl-images-amazon.com/images/I/41zoxjP9lcL._SX376_BO1,204,203,200_.jpg",
       pages: 464,
-      level: "Intermediate",
-      excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      level: "Intermediate"
     },
     {
       id: 2,
@@ -30,8 +28,7 @@ const Books = () => {
       description: "Elements of reusable object-oriented software.",
       cover: "https://images-na.ssl-images-amazon.com/images/I/51kAoU8va-L._SX396_BO1,204,203,200_.jpg",
       pages: 416,
-      level: "Advanced",
-      excerpt: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+      level: "Advanced"
     },
     {
       id: 3,
@@ -42,8 +39,7 @@ const Books = () => {
       description: "An easy & proven way to build good habits & break bad ones.",
       cover: "https://images-na.ssl-images-amazon.com/images/I/51-nXsSRfZL._SX328_BO1,204,203,200_.jpg",
       pages: 320,
-      level: "Beginner",
-      excerpt: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+      level: "Beginner"
     },
     {
       id: 4,
@@ -54,8 +50,7 @@ const Books = () => {
       description: "Rules for focused success in a distracted world.",
       cover: "https://images-na.ssl-images-amazon.com/images/I/41rhx6d02NL._SX329_BO1,204,203,200_.jpg",
       pages: 304,
-      level: "Intermediate",
-      excerpt: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      level: "Intermediate"
     },
     {
       id: 5,
@@ -66,8 +61,7 @@ const Books = () => {
       description: "Timeless lessons on wealth, greed, and happiness.",
       cover: "https://images-na.ssl-images-amazon.com/images/I/41oYp33uD1L._SX324_BO1,204,203,200_.jpg",
       pages: 256,
-      level: "Beginner",
-      excerpt: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
+      level: "Beginner"
     },
     {
       id: 6,
@@ -78,8 +72,7 @@ const Books = () => {
       description: "A brief history of humankind.",
       cover: "https://images-na.ssl-images-amazon.com/images/I/41lZKXt1%2BML._SX333_BO1,204,203,200_.jpg",
       pages: 443,
-      level: "Beginner",
-      excerpt: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores."
+      level: "Beginner"
     }
   ];
 
@@ -250,12 +243,9 @@ const Books = () => {
                       <Bookmark className="w-4 h-4 mr-1" />
                       Save
                     </button>
-                    <Link to={`/book/${book.id}`}>
-                      <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
-                        <Eye className="w-4 h-4 mr-1" />
-                        Preview
-                      </button>
-                    </Link>
+                    <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                      View Details
+                    </button>
                   </div>
                 </div>
               </motion.div>

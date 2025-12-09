@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
-import { Book, Kanban, PenTool, Users, Github } from "lucide-react";
+import { Book, Kanban, PenTool, Users, Github, TrendingUp, Lightbulb, Globe, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo from "../components/LearnSpace logo.png";
 
-
-export default function Home() {
+function Home() {
     // Sample testimonials data
     const testimonials = [
         {
@@ -213,7 +212,7 @@ export default function Home() {
                             Get Started Now
                         </Link>
                     </motion.div>
-                </div>
+                </motion.div>
             </div>
 
             {/* Feature Highlights Section */}
@@ -286,3 +285,5 @@ export default function Home() {
         </div>
     );
 }
+
+export default Home;

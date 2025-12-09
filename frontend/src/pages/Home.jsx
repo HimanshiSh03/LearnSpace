@@ -365,43 +365,103 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white text-center py-10">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center gap-3 mb-6 md:mb-0">
-              <img
-                src={Logo}
-                alt="LearnSpace logo"
-                className="w-10 h-10 object-contain"
-              />
-              <h1 className="text-2xl font-bold text-white">LearnSpace</h1>
+      <footer className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-gray-300">
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          {/* Top Section */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <img
+                  src={Logo}
+                  alt="LearnSpace logo"
+                  className="w-10 h-10 object-contain"
+                />
+                <h2 className="text-2xl font-bold text-white">LearnSpace</h2>
+              </div>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                LearnSpace is your all-in-one learning and productivity
+                platform. Organize tasks, explore curated resources, and grow
+                with a collaborative community.
+              </p>
             </div>
-            <div className="flex gap-8 text-lg">
-              <Link to="/" className="hover:text-indigo-300 transition-colors">
-                Home
-              </Link>
-              <Link
-                to="/kanban"
-                className="hover:text-indigo-300 transition-colors"
-              >
-                Kanban
-              </Link>
-              <Link
-                to="/books"
-                className="hover:text-indigo-300 transition-colors"
-              >
-                BookSpace
-              </Link>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <Link to="/" className="hover:text-indigo-400 transition">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/kanban"
+                    className="hover:text-indigo-400 transition"
+                  >
+                    Kanban Board
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/books"
+                    className="hover:text-indigo-400 transition"
+                  >
+                    BookSpace
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contributors"
+                    className="hover:text-indigo-400 transition"
+                  >
+                    Contributors
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Resources</h3>
+              <ul className="space-y-3 text-sm">
+                <li className="hover:text-indigo-400 transition cursor-pointer">
+                  Documentation
+                </li>
+                <li className="hover:text-indigo-400 transition cursor-pointer">
+                  Open Source
+                </li>
+                <li className="hover:text-indigo-400 transition cursor-pointer">
+                  Community Guidelines
+                </li>
+                <li className="hover:text-indigo-400 transition cursor-pointer">
+                  Support
+                </li>
+              </ul>
+            </div>
+
+            {/* Call to Action */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">
+                Join the Community
+              </h3>
+              <p className="text-sm text-gray-400 mb-4">
+                Contribute, collaborate, and grow with learners across the
+                world.
+              </p>
               <Link
                 to="/contributors"
-                className="hover:text-indigo-300 transition-colors"
+                className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg text-sm font-medium transition"
               >
-                Contributors
+                Become a Contributor
               </Link>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-700 text-gray-400">
-            © {new Date().getFullYear()} LearnSpace • Built with passion for
+
+          {/* Divider */}
+          <div className="border-t border-gray-700 mt-14 pt-8 text-center text-sm text-gray-400">
+            © {new Date().getFullYear()} LearnSpace · Built with passion for
             learners worldwide
           </div>
         </div>

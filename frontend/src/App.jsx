@@ -85,6 +85,26 @@ function App() {
               </ProtectedRoute>
             }
           />
+          
+          {/* Contributors route */}
+          <Route
+            path="/contributors"
+            element={
+              <ProtectedRoute>
+                <Contributors />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Owner/About route */}
+          <Route
+            path="/owner"
+            element={
+              <ProtectedRoute>
+                <Owner />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </Router>

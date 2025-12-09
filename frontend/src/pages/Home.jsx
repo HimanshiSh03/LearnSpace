@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Book, Kanban, PenTool, Users, User, Star, TrendingUp, Lightbulb, Globe, Award } from "lucide-react";
+import { Book, Kanban, PenTool, Users, Github } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo from "../components/LearnSpace logo.png";
 
@@ -81,21 +81,12 @@ export default function Home() {
                     <h1 className="text-2xl font-bold text-indigo-600">LearnSpace</h1>
                 </div>
 
-                <div className="hidden md:flex gap-6 lg:gap-8 text-lg">
-                    <Link to="/" className="text-indigo-600 font-medium">Home</Link>
-                    <Link to="/kanban" className="hover:text-indigo-600 transition-colors">Kanban</Link>
-                    <Link to="/books" className="hover:text-indigo-600 transition-colors">BookSpace</Link>
-                    <Link to="/whiteboard" className="hover:text-indigo-600 transition-colors">Whiteboard</Link>
-                    <Link to="/contributors" className="hover:text-indigo-600 transition-colors">Contributors</Link>
-                    <Link to="/owner" className="hover:text-indigo-600 transition-colors">About</Link>
-                </div>
-
-                <div className="md:hidden">
-                    <button className="text-gray-600 hover:text-indigo-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+                <div className="flex gap-8 text-lg">
+                    <Link to="/">Home</Link>
+                    <Link to="/kanban">Kanban</Link>
+                    <Link to="/books">BookSpace</Link>
+                    <Link to="/whiteboard">Whiteboard</Link>
+                    <Link to="/contributors">Contributors</Link>
                 </div>
             </nav>
 
@@ -114,24 +105,17 @@ export default function Home() {
                     Organize your tasks, learn efficiently, and collaborate effortlessly with our all-in-one platform designed for modern learners.
                 </p>
 
-                <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-                    <motion.div whileHover={{ scale: 1.05 }}>
-                        <Link
-                            to="/kanban"
-                            className="px-8 py-4 bg-indigo-600 text-white rounded-xl shadow-lg text-lg font-semibold hover:bg-indigo-700 transition-colors"
-                        >
-                            Enter Workspace
-                        </Link>
-                    </motion.div>
-                    <motion.div whileHover={{ scale: 1.05 }}>
-                        <Link
-                            to="/books"
-                            className="px-8 py-4 bg-white text-indigo-600 border-2 border-indigo-600 rounded-xl shadow-lg text-lg font-semibold hover:bg-indigo-50 transition-colors"
-                        >
-                            Explore Resources
-                        </Link>
-                    </motion.div>
-                </div>
+                <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="mt-8 inline-block"
+                >
+                    <Link
+                        to="/kanban"
+                        className="px-8 py-3 bg-indigo-600 text-white rounded-xl shadow-md text-lg font-semibold"
+                    >
+                        Enter Workspace
+                    </Link>
+                </motion.div>
             </motion.div>
 
             {/* Stats Section */}
@@ -187,57 +171,36 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Testimonials Section */}
-            <div className="mt-20 md:mt-24 bg-gray-50 py-16 px-4">
-                <div className="container mx-auto">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-800">What Our Users Say</h2>
-                        <p className="text-xl text-gray-600 mt-4">
-                            Join thousands of satisfied learners who transformed their study habits.
-                        </p>
-                    </div>
+            {/* Bottom Section */}
+            <div className="px-16 grid grid-cols-1 md:grid-cols-2 gap-10 pb-20">
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {testimonials.map((testimonial, index) => (
-                            <motion.div
-                                key={testimonial.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="bg-white p-8 rounded-2xl shadow-lg"
-                            >
-                                <div className="flex items-center">
-                                    {[...Array(5)].map((_, i) => (
-                                        <Star
-                                            key={i}
-                                            className={`w-5 h-5 ${i < testimonial.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
-                                        />
-                                    ))}
-                                </div>
-                                <p className="text-gray-600 mt-4 italic">"{testimonial.content}"</p>
-                                <div className="mt-6 flex items-center">
-                                    <div className="bg-indigo-100 rounded-full w-12 h-12 flex items-center justify-center">
-                                        <span className="text-indigo-800 font-bold">
-                                            {testimonial.name.charAt(0)}
-                                        </span>
-                                    </div>
-                                    <div className="ml-4">
-                                        <h4 className="font-bold text-gray-800">{testimonial.name}</h4>
-                                        <p className="text-gray-600 text-sm">{testimonial.role}</p>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+                {/* Contributors */}
+                <motion.div
+                    whileHover={{ scale: 1.04 }}
+                    className="p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center"
+                >
+                    <Users className="w-12 h-12 text-indigo-600" />
+                    <h3 className="text-xl font-bold mt-4">Contributors</h3>
+                    <p className="text-gray-600 text-center mt-2">
+                        Meet the amazing people helping improve LearnSpace.
+                    </p>
+                    <Link 
+                        to="/contributors" 
+                        className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+                    >
+                        View Contributors
+                    </Link>
+                </motion.div>
 
-            {/* CTA Section */}
-            <div className="mt-20 md:mt-24 bg-gradient-to-r from-indigo-500 to-purple-600 py-16 px-4">
-                <div className="container mx-auto text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white">Ready to Transform Your Learning?</h2>
-                    <p className="text-xl text-indigo-100 mt-4 max-w-3xl mx-auto">
-                        Join our community of learners and start organizing your educational journey today.
+                {/* GitHub Repository */}
+                <motion.div
+                    whileHover={{ scale: 1.04 }}
+                    className="p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center"
+                >
+                    <Github className="w-12 h-12 text-indigo-600" />
+                    <h3 className="text-xl font-bold mt-4">GitHub Repository</h3>
+                    <p className="text-gray-600 text-center mt-2">
+                        Check out our open-source project and contribute.
                     </p>
                     <motion.div
                         whileHover={{ scale: 1.05 }}

@@ -54,11 +54,15 @@ const Contributors = () => {
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800">Contributors</h1>
+            <h1 className="text-3xl font-bold text-gray-800 flex items-center">
+              <Trophy className="mr-2 text-yellow-500" />
+              Contributors Leaderboard
+            </h1>
             <Link 
               to="/" 
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center"
             >
+              <HomeIcon className="w-4 h-4 mr-2" />
               Back to Home
             </Link>
           </div>
@@ -82,14 +86,18 @@ const Contributors = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Contributors</h1>
+            <h1 className="text-3xl font-bold text-gray-800 flex items-center">
+              <Trophy className="mr-2 text-yellow-500" />
+              Contributors Leaderboard
+            </h1>
             <p className="text-gray-600 mt-2">Meet the amazing people helping improve LearnSpace</p>
           </div>
           <Link 
             to="/" 
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center gap-2"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center"
           >
-            <span>Back to Home</span>
+            <HomeIcon className="w-4 h-4 mr-2" />
+            Back to Home
           </Link>
         </div>
 
@@ -138,7 +146,7 @@ const Contributors = () => {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center">
+          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
             <div className="bg-indigo-100 p-3 rounded-lg">
               <Users className="text-indigo-600 w-6 h-6" />
             </div>
@@ -148,7 +156,7 @@ const Contributors = () => {
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center">
+          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
             <div className="bg-green-100 p-3 rounded-lg">
               <Trophy className="text-green-600 w-6 h-6" />
             </div>
@@ -160,7 +168,7 @@ const Contributors = () => {
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center">
+          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
             <div className="bg-yellow-100 p-3 rounded-lg">
               <Star className="text-yellow-600 w-6 h-6" />
             </div>
@@ -172,7 +180,7 @@ const Contributors = () => {
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center">
+          <div className="bg-white rounded-xl shadow-lg p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
             <div className="bg-blue-100 p-3 rounded-lg">
               <Target className="text-blue-600 w-6 h-6" />
             </div>
@@ -190,7 +198,10 @@ const Contributors = () => {
         {/* Search and Filter */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <h2 className="text-xl font-bold text-gray-800">Leaderboard</h2>
+            <h2 className="text-xl font-bold text-gray-800 flex items-center">
+              <Medal className="mr-2 text-yellow-500" />
+              Leaderboard Rankings
+            </h2>
             <div className="w-full md:w-auto">
               <input
                 type="text"
@@ -211,6 +222,14 @@ const Contributors = () => {
             <p className="mt-1 text-gray-500">
               {searchTerm ? "No contributors match your search." : "Be the first to contribute!"}
             </p>
+            <div className="mt-6">
+              <Link 
+                to="/kanban" 
+                className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Start Contributing
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -247,7 +266,7 @@ const Contributors = () => {
                     return (
                       <tr 
                         key={contributor._id} 
-                        className={index < 3 ? (index === 0 ? "bg-yellow-50" : index === 1 ? "bg-gray-100" : "bg-orange-50") : ""}
+                        className={`hover:bg-gray-50 transition-colors duration-150 ${index < 3 ? (index === 0 ? "bg-yellow-50" : index === 1 ? "bg-gray-100" : "bg-orange-50") : ""}`}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-lg font-bold text-gray-900">
@@ -273,16 +292,28 @@ const Contributors = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-bold text-indigo-600">{contributor.points}</div>
+                          <div className="text-sm font-bold text-indigo-600 flex items-center">
+                            <Star className="w-4 h-4 mr-1 text-yellow-500" />
+                            {contributor.points}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {contributor.level1Tasks}
+                          <div className="flex items-center">
+                            <Target className="w-4 h-4 mr-1 text-green-500" />
+                            {contributor.level1Tasks}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {contributor.level2Tasks}
+                          <div className="flex items-center">
+                            <Target className="w-4 h-4 mr-1 text-blue-500" />
+                            {contributor.level2Tasks}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {contributor.level3Tasks}
+                          <div className="flex items-center">
+                            <Target className="w-4 h-4 mr-1 text-purple-500" />
+                            {contributor.level3Tasks}
+                          </div>
                         </td>
                       </tr>
                     );
@@ -295,9 +326,12 @@ const Contributors = () => {
 
         {/* Contributor Roles Explanation */}
         <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Contributor Roles</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <Award className="mr-2 text-yellow-500" />
+            Contributor Roles
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
+            <div className="border border-yellow-200 rounded-lg p-4 bg-yellow-50 hover:shadow-md transition-shadow duration-300">
               <h3 className="font-bold text-yellow-700 flex items-center">
                 <Medal className="w-5 h-5 mr-2" />
                 New Contributor
@@ -305,7 +339,7 @@ const Contributors = () => {
               <p className="text-yellow-600 text-sm mt-2">0-19 points</p>
               <p className="text-gray-600 text-sm mt-1">Getting started with contributions</p>
             </div>
-            <div className="border border-green-200 rounded-lg p-4 bg-green-50">
+            <div className="border border-green-200 rounded-lg p-4 bg-green-50 hover:shadow-md transition-shadow duration-300">
               <h3 className="font-bold text-green-700 flex items-center">
                 <Medal className="w-5 h-5 mr-2" />
                 Regular Contributor
@@ -313,7 +347,7 @@ const Contributors = () => {
               <p className="text-green-600 text-sm mt-2">20-49 points</p>
               <p className="text-gray-600 text-sm mt-1">Active community member</p>
             </div>
-            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
+            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50 hover:shadow-md transition-shadow duration-300">
               <h3 className="font-bold text-blue-700 flex items-center">
                 <Medal className="w-5 h-5 mr-2" />
                 Senior Contributor
@@ -321,13 +355,56 @@ const Contributors = () => {
               <p className="text-blue-600 text-sm mt-2">50-99 points</p>
               <p className="text-gray-600 text-sm mt-1">Experienced contributor</p>
             </div>
-            <div className="border border-purple-200 rounded-lg p-4 bg-purple-50">
+            <div className="border border-purple-200 rounded-lg p-4 bg-purple-50 hover:shadow-md transition-shadow duration-300">
               <h3 className="font-bold text-purple-700 flex items-center">
                 <Medal className="w-5 h-5 mr-2" />
                 Master Contributor
               </h3>
               <p className="text-purple-600 text-sm mt-2">100+ points</p>
               <p className="text-gray-600 text-sm mt-1">Top community leader</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* How to Contribute Section */}
+        <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">How to Earn Points</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="border border-green-200 rounded-lg p-4 bg-green-50">
+              <h3 className="font-bold text-green-700 flex items-center">
+                <Star className="w-5 h-5 mr-2 text-green-500" />
+                Level 1 Tasks
+              </h3>
+              <p className="text-gray-600 text-sm mt-2">Easy tasks worth 2 points each</p>
+              <ul className="text-gray-500 text-xs mt-2 list-disc pl-5">
+                <li>Documentation fixes</li>
+                <li>Minor bug reports</li>
+                <li>Small UI improvements</li>
+              </ul>
+            </div>
+            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
+              <h3 className="font-bold text-blue-700 flex items-center">
+                <Star className="w-5 h-5 mr-2 text-blue-500" />
+                Level 2 Tasks
+              </h3>
+              <p className="text-gray-600 text-sm mt-2">Medium tasks worth 5 points each</p>
+              <ul className="text-gray-500 text-xs mt-2 list-disc pl-5">
+                <li>Feature enhancements</li>
+                <li>Bug fixes</li>
+                <li>Test coverage improvements</li>
+              </ul>
+            </div>
+            <div className="border border-purple-200 rounded-lg p-4 bg-purple-50">
+              <h3 className="font-bold text-purple-700 flex items-center">
+                <Star className="w-5 h-5 mr-2 text-purple-500" />
+                Level 3 Tasks
+              </h3>
+              <p className="text-gray-600 text-sm mt-2">Hard tasks worth 11 points each</p>
+              <ul className="text-gray-500 text-xs mt-2 list-disc pl-5">
+                <li>Major feature development</li>
+                <li>Architecture improvements</li>
+                <li>Performance optimizations</li>
+              </ul>
             </div>
           </div>
         </div>

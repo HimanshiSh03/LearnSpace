@@ -106,6 +106,12 @@ export default function Home() {
                     <p className="text-gray-600 text-center mt-2">
                         Meet the amazing people helping improve LearnSpace.
                     </p>
+                    <Link 
+                        to="/contributors" 
+                        className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+                    >
+                        View Contributors
+                    </Link>
                 </motion.div>
 
                 {/* Owner */}
@@ -118,6 +124,12 @@ export default function Home() {
                     <p className="text-gray-600 text-center mt-2">
                         Learn more about the developer behind this project.
                     </p>
+                    <Link 
+                        to="/owner" 
+                        className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+                    >
+                        Learn More
+                    </Link>
                 </motion.div>
 
             </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Trophy, Medal, Award, Users, Star, Target } from "lucide-react";
+import { Trophy, Medal, Award, Users, Star, Target, Crown, Zap } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000';
 
@@ -74,6 +74,9 @@ const Contributors = () => {
     );
   }
 
+  // Get top contributor
+  const topContributor = contributors.length > 0 ? contributors[0] : null;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       <div className="container mx-auto px-4 py-8">
@@ -89,6 +92,49 @@ const Contributors = () => {
             <span>Back to Home</span>
           </Link>
         </div>
+
+        {/* Featured Contributor */}
+        {topContributor && (
+          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg p-6 mb-8 text-white">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="flex-shrink-0">
+                <div className="bg-white bg-opacity-20 rounded-full p-2 w-24 h-24 flex items-center justify-center">
+                  <Crown className="text-yellow-300 w-12 h-12" />
+                </div>
+              </div>
+              
+              <div className="text-center md:text-left">
+                <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+                  <Trophy className="text-yellow-300" />
+                  <h2 className="text-2xl font-bold">Featured Contributor</h2>
+                </div>
+                
+                <h3 className="text-3xl font-bold mb-2">{topContributor.username}</h3>
+                
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-3">
+                  <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
+                    <div className="font-bold text-xl">{topContributor.points}</div>
+                    <div className="text-sm">Total Points</div>
+                  </div>
+                  
+                  <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
+                    <div className="font-bold text-xl">
+                      {topContributor.level1Tasks + topContributor.level2Tasks + topContributor.level3Tasks}
+                    </div>
+                    <div className="text-sm">Tasks Completed</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-center md:justify-start gap-2">
+                  <Zap className="text-yellow-300" />
+                  <span className="font-medium">
+                    {getContributorRole(topContributor.points).name}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

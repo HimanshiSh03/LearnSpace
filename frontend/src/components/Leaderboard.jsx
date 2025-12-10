@@ -43,6 +43,11 @@ const Leaderboard = () => {
     return `#${index + 1}`;
   };
 
+  // Filter contributors based on search term
+  const filteredContributors = contributors.filter(contributor =>
+    contributor.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (loading) {
     return (
       <div className="bg-white rounded-lg shadow p-6">
@@ -112,7 +117,7 @@ const Leaderboard = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {contributors.map((contributor, index) => {
+              {filteredContributors.map((contributor, index) => {
                 const role = getContributorRole(contributor.points);
                 return (
                   <tr 

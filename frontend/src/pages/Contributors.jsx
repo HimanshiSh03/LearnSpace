@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Trophy, Medal, Award, Users, Star, Target, Crown, Zap } from "lucide-react";
+import { Trophy, Medal, Award, Users, Star, Target, Crown, Zap, HomeIcon } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000';
 

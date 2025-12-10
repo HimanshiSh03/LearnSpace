@@ -113,30 +113,87 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center mt-10 md:mt-20 px-4"
+        transition={{ duration: 0.7 }}
+        className="relative overflow-hidden"
       >
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-800 leading-tight">
-          Your Personal Learning & <br className="hidden md:block" />
-          <span className="text-indigo-600">Productivity Hub</span>
-        </h2>
-        <p className="text-xl text-gray-600 mt-6 max-w-3xl mx-auto">
-          Organize your tasks, learn efficiently, and collaborate effortlessly
-          with our all-in-one platform designed for modern learners.
-        </p>
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+            alt="Learning background"
+            className="w-full h-full object-cover"
+          />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/90 via-indigo-800/80 to-purple-900/90" />
+        </div>
 
-        <motion.div whileHover={{ scale: 1.05 }} className="mt-8 inline-block">
-          <Link
-            to="/kanban"
-            className="px-8 py-3 bg-indigo-600 text-white rounded-xl shadow-md text-lg font-semibold"
+        {/* Content */}
+        <div className="relative z-10 max-w-6xl mx-auto px-6 py-32 text-center text-white">
+          <h2 className="text-4xl md:text-6xl font-extrabold leading-tight">
+            Your Personal Learning <br />
+            <span className="text-indigo-300">& Productivity Hub</span>
+          </h2>
+
+          <p className="text-lg md:text-xl mt-6 max-w-3xl mx-auto text-indigo-100">
+            Manage tasks, discover resources, collaborate with peers, and track
+            your progress — all in one powerful workspace built for modern
+            learners.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="mt-10 flex justify-center gap-6 flex-wrap">
+            <motion.div whileHover={{ scale: 1.08 }}>
+              <Link
+                to="/kanban"
+                className="px-8 py-4 bg-white text-indigo-700 rounded-xl shadow-lg text-lg font-semibold"
+              >
+                Get Started
+              </Link>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.05 }}>
+              <Link
+                to="/contributors"
+                className="px-8 py-4 border border-white/60 text-white rounded-xl text-lg font-semibold hover:bg-white/10 transition"
+              >
+                Meet the Community
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Feature Highlights */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
           >
-            Enter Workspace
-          </Link>
-        </motion.div>
-      </motion.div>
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
+              <h4 className="font-semibold text-lg">📚 Curated Learning</h4>
+              <p className="text-indigo-100 mt-2 text-sm">
+                High-quality resources tailored to your interests.
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
+              <h4 className="font-semibold text-lg">✅ Smart Productivity</h4>
+              <p className="text-indigo-100 mt-2 text-sm">
+                Kanban boards that keep your goals on track.
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
+              <h4 className="font-semibold text-lg">🤝 Community Powered</h4>
+              <p className="text-indigo-100 mt-2 text-sm">
+                Learn, share, and grow together with peers.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </motion.section>
 
       {/* Stats Section */}
       <div className="mt-16 md:mt-24 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 py-14">

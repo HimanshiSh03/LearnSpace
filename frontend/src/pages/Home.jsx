@@ -1,10 +1,76 @@
 import { motion } from "framer-motion";
-import { Book, Kanban, PenTool, Users, Github } from "lucide-react";
+import { Book, Kanban, PenTool, Users, Github, TrendingUp, Lightbulb, Globe, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo from "../components/LearnSpace logo.png";
 
+function Home() {
+    // Sample testimonials data
+    const testimonials = [
+        {
+            id: 1,
+            name: "Alex Johnson",
+            role: "Computer Science Student",
+            content: "LearnSpace transformed how I organize my study materials. The Kanban board keeps me on track with all my assignments.",
+            rating: 5
+        },
+        {
+            id: 2,
+            name: "Sarah Williams",
+            role: "Self-Taught Developer",
+            content: "The BookSpace feature helped me discover amazing programming resources I never knew existed. Highly recommended!",
+            rating: 5
+        },
+        {
+            id: 3,
+            name: "Michael Chen",
+            role: "Product Manager",
+            content: "As someone juggling multiple projects, the Whiteboard feature is invaluable for brainstorming and planning.",
+            rating: 4
+        }
+    ];
 
-export default function Home() {
+    // Statistics data
+    const stats = [
+        { value: "10K+", label: "Active Users" },
+        { value: "500+", label: "Resources" },
+        { value: "50+", label: "Contributors" },
+        { value: "4.8", label: "Average Rating" }
+    ];
+
+    // Features data
+    const features = [
+        {
+            icon: <Kanban className="w-8 h-8" />,
+            title: "Kanban Board",
+            description: "Organize your tasks with drag-and-drop simplicity. Visualize your workflow and boost productivity."
+        },
+        {
+            icon: <Book className="w-8 h-8" />,
+            title: "BookSpace",
+            description: "Access curated learning resources and books categorized by topics and difficulty levels."
+        },
+        {
+            icon: <PenTool className="w-8 h-8" />,
+            title: "Whiteboard",
+            description: "Brainstorm ideas visually with our collaborative whiteboard tool. Perfect for planning and creativity."
+        },
+        {
+            icon: <Users className="w-8 h-8" />,
+            title: "Community",
+            description: "Connect with fellow learners and contributors. Share knowledge and grow together."
+        },
+        {
+            icon: <TrendingUp className="w-8 h-8" />,
+            title: "Progress Tracking",
+            description: "Monitor your learning journey with detailed analytics and achievement badges."
+        },
+        {
+            icon: <Lightbulb className="w-8 h-8" />,
+            title: "Smart Recommendations",
+            description: "Get personalized learning suggestions based on your interests and progress."
+        }
+    ];
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
 
@@ -127,9 +193,15 @@ export default function Home() {
                         to="/owner" 
                         className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
                     >
-                        Learn More
-                    </Link>
+                        <Link
+                            to="/kanban"
+                            className="inline-block px-10 py-4 bg-white text-indigo-600 rounded-xl shadow-lg text-lg font-semibold hover:bg-gray-100 transition-colors"
+                        >
+                            Get Started Now
+                        </Link>
+                    </motion.div>
                 </motion.div>
+            </div>
 
             </div>
 
@@ -141,3 +213,5 @@ export default function Home() {
         </div>
     );
 }
+
+export default Home;

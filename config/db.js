@@ -9,8 +9,9 @@ const connectToDB = async () => {
     await mongoose.connect(mongoURI);
     console.log('MongoDB connected successfully');
   } catch (error) {
-    console.error('MongoDB connection error:', error);
-    process.exit(1); // Exit process with failure
+    console.error('MongoDB connection error:', error.message);
+    console.log('Running in offline mode - some features may be limited');
+    // Continue running the application even if MongoDB is not available
   }
 };
 

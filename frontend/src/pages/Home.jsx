@@ -4,6 +4,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+//  Route Guard using localStorage
+
 import Kanban from "./Kanban";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
@@ -14,7 +16,6 @@ import Whiteboard from "./components/Whiteboard";
 import { Link } from "react-router-dom";
 
 
-//  Route Guard using localStorage
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("auth-token");
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, Bookmark, Download, Eye, ThumbsUp, MessageCircle, Share2 } from "lucide-react";
+import { ArrowLeft, Star, Bookmark, Download, Eye, ThumbsUp, MessageCircle, Share2, BookOpen } from "lucide-react";
 
 const BookPreview = () => {
   const { id } = useParams();
@@ -11,7 +11,6 @@ const BookPreview = () => {
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
   const [activeTab, setActiveTab] = useState("preview");
 
-  // Sample book data
   const books = [
     {
       id: 1,
@@ -105,7 +104,6 @@ const BookPreview = () => {
     }
   ];
 
-  // Sample reviews data
   const sampleReviews = [
     {
       id: 1,
@@ -134,13 +132,11 @@ const BookPreview = () => {
   ];
 
   useEffect(() => {
-    // Find the book by ID
     const foundBook = books.find(book => book.id === parseInt(id));
     if (foundBook) {
       setBook(foundBook);
       setReviews(sampleReviews);
     } else {
-      // If book not found, redirect to books page
       navigate("/books");
     }
   }, [id, navigate]);
@@ -175,7 +171,7 @@ const BookPreview = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       {/* Back Button */}
-      <div className="container mx-auto px-6 py-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Link to="/books" className="flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Books
@@ -183,84 +179,54 @@ const BookPreview = () => {
       </div>
 
       {/* Book Header */}
-      <div className="container mx-auto px-6 pb-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-8">
         <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/4 mb-6 md:mb-0 flex justify-center">
+          <div className="flex flex-col md:flex-row items-start">
+            <div className="md:w-1/3 mb-6 md:mb-0 flex justify-center">
               <img
-                className="w-48 h-64 object-cover rounded-lg shadow-lg"
+                className="w-48 h-64 sm:w-40 sm:h-56 md:w-48 md:h-64 object-cover rounded-lg shadow-lg"
                 src={book.cover}
                 alt={book.title}
               />
             </div>
-            
-            <div className="md:w-3/4 md:pl-8">
+            <div className="md:w-2/3 md:pl-6">
               <h1 className="text-3xl font-bold text-gray-900">{book.title}</h1>
               <p className="text-xl text-gray-600 mt-2">by {book.author}</p>
-              
+
               <div className="flex items-center mt-4">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-5 h-5 ${
-                        i < Math.floor(book.rating)
-                          ? "text-yellow-400 fill-current"
-                          : "text-gray-300"
-                      }`}
+                      className={`w-5 h-5 ${i < Math.floor(book.rating) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                     />
                   ))}
                 </div>
                 <span className="ml-2 text-gray-600">{book.rating} ({reviews.length} reviews)</span>
               </div>
-              
+
               <div className="mt-6 flex flex-wrap gap-2">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                  {book.level}
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                  {book.pages} pages
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-                  {book.category}
-                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">{book.level}</span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">{book.pages} pages</span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">{book.category}</span>
               </div>
-              
+
               <p className="mt-6 text-gray-700">{book.description}</p>
-              
-              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <p className="text-sm text-gray-500">Publisher</p>
-                  <p className="font-medium">{book.publisher}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Published</p>
-                  <p className="font-medium">{book.publishDate}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Category</p>
-                  <p className="font-medium capitalize">{book.category}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Pages</p>
-                  <p className="font-medium">{book.pages}</p>
-                </div>
-              </div>
-              
-              <div className="mt-8 flex flex-wrap gap-4">
-                <button className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+
+              <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-4">
+                <button className="flex-1 sm:flex-initial flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                   <Eye className="w-5 h-5 mr-2" />
                   Read Preview
                 </button>
-                <button className="flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                <button className="flex-1 sm:flex-initial flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
                   <Download className="w-5 h-5 mr-2" />
                   Download PDF
                 </button>
-                <button className="flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                <button className="flex-1 sm:flex-initial flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
                   <Bookmark className="w-5 h-5 mr-2" />
                   Save for Later
                 </button>
-                <button className="flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                <button className="flex-1 sm:flex-initial flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
                   <Share2 className="w-5 h-5 mr-2" />
                   Share
                 </button>
@@ -271,38 +237,26 @@ const BookPreview = () => {
       </div>
 
       {/* Tabs */}
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
+          <nav className="flex flex-wrap -mb-px space-x-0 sm:space-x-8">
             <button
               onClick={() => setActiveTab("preview")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === "preview"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === "preview" ? "border-indigo-500 text-indigo-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}`}
             >
               <Eye className="w-5 h-5 inline mr-2" />
               Preview
             </button>
             <button
               onClick={() => setActiveTab("reviews")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === "reviews"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === "reviews" ? "border-indigo-500 text-indigo-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}`}
             >
               <MessageCircle className="w-5 h-5 inline mr-2" />
               Reviews ({reviews.length})
             </button>
             <button
               onClick={() => setActiveTab("excerpt")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === "excerpt"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === "excerpt" ? "border-indigo-500 text-indigo-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}`}
             >
               <BookOpen className="w-5 h-5 inline mr-2" />
               Excerpt
@@ -312,13 +266,9 @@ const BookPreview = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {activeTab === "preview" && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm p-6"
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Book Preview</h2>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
               <Eye className="mx-auto h-12 w-12 text-gray-400" />
@@ -341,11 +291,8 @@ const BookPreview = () => {
         )}
 
         {activeTab === "reviews" && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
+            <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Write a Review</h2>
               <form onSubmit={handleReviewSubmit}>
                 <div className="mb-4">
@@ -354,17 +301,12 @@ const BookPreview = () => {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-8 h-8 cursor-pointer ${
-                          i < newReview.rating
-                            ? "text-yellow-400 fill-current"
-                            : "text-gray-300"
-                        }`}
+                        className={`w-8 h-8 cursor-pointer ${i < newReview.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                         onClick={() => setNewReview({...newReview, rating: i + 1})}
                       />
                     ))}
                   </div>
                 </div>
-                
                 <div className="mb-4">
                   <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
                     Your Review
@@ -378,47 +320,31 @@ const BookPreview = () => {
                     onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
                   ></textarea>
                 </div>
-                
-                <button
-                  type="submit"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
-                >
+                <button type="submit" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none">
                   Submit Review
                 </button>
               </form>
             </div>
-            
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">User Reviews</h2>
-              <div className="space-y-6">
+              <div className="space-y-6 px-2 sm:px-0">
                 {reviews.map((review) => (
                   <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0 last:pb-0">
                     <div className="flex justify-between">
                       <h3 className="text-lg font-medium text-gray-900">{review.user}</h3>
                       <span className="text-sm text-gray-500">{review.date}</span>
                     </div>
-                    
                     <div className="flex items-center mt-1">
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < review.rating
-                                ? "text-yellow-400 fill-current"
-                                : "text-gray-300"
-                            }`}
-                          />
+                          <Star key={i} className={`w-4 h-4 ${i < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`} />
                         ))}
                       </div>
                     </div>
-                    
                     <p className="mt-3 text-gray-700">{review.comment}</p>
-                    
                     <div className="mt-3 flex items-center">
-                      <button className="flex items-center text-gray-500 hover:text-gray-700 text-sm">
-                        <ThumbsUp className="w-4 h-4 mr-1" />
-                        {review.likes}
+                      <button className="flex items-center text-gray-500 hover:text-indigo-600 mr-4">
+                        <ThumbsUp className="w-4 h-4 mr-1" /> {review.likes}
                       </button>
                     </div>
                   </div>
@@ -429,40 +355,10 @@ const BookPreview = () => {
         )}
 
         {activeTab === "excerpt" && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm p-6"
-          >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Book Excerpt</h2>
-            <div className="prose max-w-none">
-              <p className="text-gray-700 leading-relaxed">
-                {book.excerpt}
-              </p>
-              <p className="text-gray-700 leading-relaxed mt-4">
-                This is a sample excerpt from the book. In a real implementation, this would show 
-                a longer passage from the actual book content to give readers a taste of the writing style 
-                and key concepts covered in the book.
-              </p>
-              <p className="text-gray-700 leading-relaxed mt-4">
-                The full book contains {book.pages} pages of in-depth content, practical examples, 
-                and actionable advice that can help transform your approach to {book.category}.
-              </p>
-              <div className="mt-8 p-4 bg-indigo-50 rounded-lg">
-                <h3 className="font-bold text-indigo-800">Want to read more?</h3>
-                <p className="text-indigo-700 mt-2">
-                  Download the full PDF or purchase the book to access all chapters and content.
-                </p>
-                <div className="mt-4 flex gap-3">
-                  <button className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <Download className="w-4 h-4 mr-2" />
-                    Download PDF
-                  </button>
-                  <button className="flex items-center bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    Buy Book
-                  </button>
-                </div>
-              </div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Excerpt</h2>
+            <div className="prose max-w-full text-gray-700">
+              <p>{book.excerpt}</p>
             </div>
           </motion.div>
         )}

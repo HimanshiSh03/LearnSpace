@@ -264,44 +264,48 @@ export default function Home() {
       </div>
 
       {/* Bottom Section */}
-      <div className="px-16 grid grid-cols-1 md:grid-cols-2 gap-10 pb-20">
-        {/* Contributors */}
-        <motion.div
-          whileHover={{ scale: 1.04 }}
-          className="p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center"
-        >
-          <Users className="w-12 h-12 text-indigo-600" />
-          <h3 className="text-xl font-bold mt-4">Contributors</h3>
-          <p className="text-gray-600 text-center mt-2">
-            Meet the amazing people helping improve LearnSpace.
-          </p>
-          <Link
-            to="/contributors"
-            className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
-          >
-            View Contributors
-          </Link>
-        </motion.div>
-
-        {/* GitHub Repository */}
-        <motion.div
-          whileHover={{ scale: 1.04 }}
-          className="p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center"
-        >
-          <Github className="w-12 h-12 text-indigo-600" />
-          <h3 className="text-xl font-bold mt-4">GitHub Repository</h3>
-          <p className="text-gray-600 text-center mt-2">
-            Check out our open-source project and contribute.
-          </p>
-          <motion.div whileHover={{ scale: 1.05 }} className="mt-10">
-            <Link
-              to="/kanban"
-              className="inline-block px-10 py-4 bg-white text-indigo-600 rounded-xl shadow-lg text-lg font-semibold hover:bg-gray-100 transition-colors"
+      <div className="mt-20 md:mt-24 px-4 md:px-8 pb-20">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+            {/* Contributors */}
+            <motion.div
+              whileHover={{ scale: 1.04 }}
+              className="p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center"
             >
-              Get Started Now
-            </Link>
-          </motion.div>
-        </motion.div>
+              <Users className="w-12 h-12 text-indigo-600" />
+              <h3 className="text-xl font-bold mt-4">Contributors</h3>
+              <p className="text-gray-600 text-center mt-2">
+                Meet the amazing people helping improve LearnSpace.
+              </p>
+              <Link
+                to="/contributors"
+                className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+              >
+                View Contributors
+              </Link>
+            </motion.div>
+
+            {/* GitHub Repository */}
+            <motion.div
+              whileHover={{ scale: 1.04 }}
+              className="p-6 bg-white rounded-2xl shadow-lg flex flex-col items-center"
+            >
+              <Github className="w-12 h-12 text-indigo-600" />
+              <h3 className="text-xl font-bold mt-4">GitHub Repository</h3>
+              <p className="text-gray-600 text-center mt-2">
+                Check out our open-source project and contribute.
+              </p>
+              <motion.div whileHover={{ scale: 1.05 }} className="mt-4">
+                <Link
+                  to="/kanban"
+                  className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+                >
+                  Get Started Now
+                </Link>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
       </div>
 
       {/* Feature Highlights Section */}

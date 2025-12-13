@@ -1,44 +1,115 @@
+import { motion } from "framer-motion";
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-//  Route Guard using localStorage
+  Book,
+  Kanban,
+  PenTool,
+  Users,
+  Github,
+  TrendingUp,
+  Lightbulb,
+  Globe,
+  Award,
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import Kanban from "./Kanban";
-import Home from "./pages/Home";
-import Books from "./pages/Books";
-import BookPreview from "./pages/BookPreview";
-import Contributors from "./pages/Contributors";
-import About from "./pages/About";
-import Whiteboard from "./components/Whiteboard";
+import Logo from "../components/LearnSpace logo.png";
 
+export default function Home() {
+  // Sample testimonials data
+  const testimonials = [
+    {
+      id: 1,
+      name: "Alex Johnson",
+      role: "Computer Science Student",
+      content:
+        "LearnSpace transformed how I organize my study materials. The Kanban board keeps me on track with all my assignments.",
+      rating: 5,
+    },
+    {
+      id: 2,
+      name: "Sarah Williams",
+      role: "Self-Taught Developer",
+      content:
+        "The BookSpace feature helped me discover amazing programming resources I never knew existed. Highly recommended!",
+      rating: 5,
+    },
+    {
+      id: 3,
+      name: "Michael Chen",
+      role: "Product Manager",
+      content:
+        "As someone juggling multiple projects, the Whiteboard feature is invaluable for brainstorming and planning.",
+      rating: 4,
+    },
+  ];
 
+  // Statistics data
+  const stats = [
+    { value: "10K+", label: "Active Users" },
+    { value: "500+", label: "Resources" },
+    { value: "50+", label: "Contributors" },
+    { value: "4.8", label: "Average Rating" },
+  ];
 
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem("auth-token");
+  // Features data
+  const features = [
+    {
+      icon: <Kanban className="w-8 h-8" />,
+      title: "Kanban Board",
+      description:
+        "Organize your tasks with drag-and-drop simplicity. Visualize your workflow and boost productivity.",
+    },
+    {
+      icon: <Book className="w-8 h-8" />,
+      title: "BookSpace",
+      description:
+        "Access curated learning resources and books categorized by topics and difficulty levels.",
+    },
+    {
+      icon: <PenTool className="w-8 h-8" />,
+      title: "Whiteboard",
+      description:
+        "Brainstorm ideas visually with our collaborative whiteboard tool. Perfect for planning and creativity.",
+    },
+    {
+      icon: <Users className="w-8 h-8" />,
+      title: "Community",
+      description:
+        "Connect with fellow learners and contributors. Share knowledge and grow together.",
+    },
+    {
+      icon: <TrendingUp className="w-8 h-8" />,
+      title: "Progress Tracking",
+      description:
+        "Monitor your learning journey with detailed analytics and achievement badges.",
+    },
+    {
+      icon: <Lightbulb className="w-8 h-8" />,
+      title: "Smart Recommendations",
+      description:
+        "Get personalized learning suggestions based on your interests and progress.",
+    },
+  ];
 
-  return isAuthenticated ? children : <Navigate to="/" replace />;
-};
-
-function App() {
   return (
-    <Router>
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       {/* Navbar */}
-      <nav className="shadow-md bg-white py-4 px-6 md:px-10 flex items-center justify-between">
-        <div className="text-2xl font-bold text-blue-600">
-          <Link to="/">LearnSpace</Link>
+      <nav className="flex justify-between px-6 md:px-10 py-6 items-center bg-white shadow-sm sticky top-0 z-50">
+        <div className="flex items-center gap-3">
+          <img
+            src={Logo}
+            alt="LearnSpace logo"
+            className="w-10 h-10 object-contain"
+          />
+          <h1 className="text-2xl font-bold text-indigo-600">LearnSpace</h1>
         </div>
 
-        {/* FIXED: flex-wrap + responsive gap */}
-        <div className="flex flex-wrap gap-6 md:gap-8 text-lg">
+        <div className="flex gap-8 text-lg">
           <Link to="/">Home</Link>
           <Link to="/kanban">Kanban</Link>
           <Link to="/books">BookSpace</Link>
           <Link to="/whiteboard">Whiteboard</Link>
           <Link to="/contributors">Contributors</Link>
-          <Link to="/about">About</Link>
+          <Link to="/about-us">About Us</Link>
         </div>
       </nav>
 
@@ -399,5 +470,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Trophy, Medal, Award, Users, Star, Target, Crown, Zap, HomeIcon } from "lucide-react";
+import { Trophy, Medal, Award, Users, Star, Target, Crown, Zap, HomeIcon, GitBranch, Code } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000';
 
 const Contributors = () => {
   const [contributors, setContributors] = useState([]);
+  const [githubContributors, setGithubContributors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("all"); // all, app, github
 
   useEffect(() => {
     fetchLeaderboard();
+    fetchGithubContributors();
   }, []);
 
   const fetchLeaderboard = async () => {
@@ -21,15 +24,47 @@ const Contributors = () => {
       }
       const data = await res.json();
       setContributors(data);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
+    }
+  };
+
+  const fetchGithubContributors = async () => {
+    try {
+      // Using the GitHub API to fetch contributors
+      const response = await fetch('https://api.github.com/repos/HimanshiSh03/LearnSpace/contributors');
+      if (!response.ok) {
+        throw new Error(`GitHub API error! Status: ${response.status}`);
+      }
+      const githubData = await response.json();
+      
+      // Format GitHub contributors to match our data structure
+      const formattedGithubContributors = githubData.map((contributor, index) => ({
+        ...contributor,
+        isGithubContributor: true,
+        points: Math.max(1, Math.floor(100 / (index + 1))), // Assign points based on position
+        level1Tasks: contributor.contributions, // Using GitHub contributions as level1 tasks
+        level2Tasks: Math.floor(contributor.contributions / 2),
+        level3Tasks: Math.floor(contributor.contributions / 5),
+        _id: `github-${contributor.id}`
+      }));
+      
+      setGithubContributors(formattedGithubContributors);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching GitHub contributors:", error);
       setLoading(false);
     }
   };
 
   // Function to determine contributor role based on points
-  const getContributorRole = (points) => {
+  const getContributorRole = (points, isGithubContributor = false) => {
+    if (isGithubContributor) {
+      if (points >= 50) return { name: "Core Maintainer", color: "text-purple-600", bgColor: "bg-purple-100" };
+      if (points >= 20) return { name: "Active Contributor", color: "text-blue-600", bgColor: "bg-blue-100" };
+      return { name: "Open Source Contributor", color: "text-green-600", bgColor: "bg-green-100" };
+    }
+    
     if (points >= 100) return { name: "Master Contributor", color: "text-purple-600", bgColor: "bg-purple-100" };
     if (points >= 50) return { name: "Senior Contributor", color: "text-blue-600", bgColor: "bg-blue-100" };
     if (points >= 20) return { name: "Regular Contributor", color: "text-green-600", bgColor: "bg-green-100" };
@@ -44,10 +79,38 @@ const Contributors = () => {
     return `#${index + 1}`;
   };
 
-  // Filter contributors based on search term
-  const filteredContributors = contributors.filter(contributor =>
-    contributor.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Combine and sort all contributors
+  const getAllContributors = () => {
+    // Combine app contributors and GitHub contributors
+    const allContributors = [...contributors, ...githubContributors];
+    
+    // Sort by points (descending)
+    return allContributors.sort((a, b) => b.points - a.points);
+  };
+
+  // Filter contributors based on active tab and search term
+  const getFilteredContributors = () => {
+    let filtered = [];
+    
+    switch (activeTab) {
+      case "app":
+        filtered = contributors;
+        break;
+      case "github":
+        filtered = githubContributors;
+        break;
+      default: // "all"
+        filtered = getAllContributors();
+    }
+    
+    // Apply search filter
+    return filtered.filter(contributor =>
+      contributor.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contributor.login?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+
+  const filteredContributors = getFilteredContributors();
 
   if (loading) {
     return (
@@ -79,7 +142,8 @@ const Contributors = () => {
   }
 
   // Get top contributor
-  const topContributor = contributors.length > 0 ? contributors[0] : null;
+  const allContributorsSorted = getAllContributors();
+  const topContributor = allContributorsSorted.length > 0 ? allContributorsSorted[0] : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
@@ -117,7 +181,9 @@ const Contributors = () => {
                   <h2 className="text-2xl font-bold">Featured Contributor</h2>
                 </div>
                 
-                <h3 className="text-3xl font-bold mb-2">{topContributor.username}</h3>
+                <h3 className="text-3xl font-bold mb-2">
+                  {topContributor.isGithubContributor ? topContributor.login : topContributor.username}
+                </h3>
                 
                 <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-3">
                   <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
@@ -127,17 +193,27 @@ const Contributors = () => {
                   
                   <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
                     <div className="font-bold text-xl">
-                      {topContributor.level1Tasks + topContributor.level2Tasks + topContributor.level3Tasks}
+                      {topContributor.isGithubContributor 
+                        ? topContributor.contributions 
+                        : topContributor.level1Tasks + topContributor.level2Tasks + topContributor.level3Tasks}
                     </div>
-                    <div className="text-sm">Tasks Completed</div>
+                    <div className="text-sm">
+                      {topContributor.isGithubContributor ? "GitHub Contributions" : "Tasks Completed"}
+                    </div>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-center md:justify-start gap-2">
                   <Zap className="text-yellow-300" />
                   <span className="font-medium">
-                    {getContributorRole(topContributor.points).name}
+                    {getContributorRole(topContributor.points, topContributor.isGithubContributor).name}
                   </span>
+                  {topContributor.isGithubContributor && (
+                    <span className="bg-black bg-opacity-30 px-2 py-1 rounded text-xs flex items-center ml-2">
+                      <GitBranch className="w-3 h-3 mr-1" />
+                      GitHub
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -152,7 +228,7 @@ const Contributors = () => {
             </div>
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Total Contributors</p>
-              <p className="text-2xl font-bold">{contributors.length}</p>
+              <p className="text-2xl font-bold">{getAllContributors().length}</p>
             </div>
           </div>
           
@@ -163,7 +239,11 @@ const Contributors = () => {
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Top Contributor</p>
               <p className="text-2xl font-bold truncate">
-                {contributors.length > 0 ? contributors[0].username : "N/A"}
+                {allContributorsSorted.length > 0 
+                  ? (allContributorsSorted[0].isGithubContributor 
+                      ? allContributorsSorted[0].login 
+                      : allContributorsSorted[0].username) 
+                  : "N/A"}
               </p>
             </div>
           </div>
@@ -175,33 +255,58 @@ const Contributors = () => {
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Total Points</p>
               <p className="text-2xl font-bold">
-                {contributors.reduce((sum, contributor) => sum + contributor.points, 0)}
+                {getAllContributors().reduce((sum, contributor) => sum + contributor.points, 0)}
               </p>
             </div>
           </div>
           
           <div className="bg-white rounded-xl shadow-lg p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
             <div className="bg-blue-100 p-3 rounded-lg">
-              <Target className="text-blue-600 w-6 h-6" />
+              <Code className="text-blue-600 w-6 h-6" />
             </div>
             <div className="ml-4">
-              <p className="text-gray-500 text-sm">Avg. Points</p>
-              <p className="text-2xl font-bold">
-                {contributors.length > 0 
-                  ? Math.round(contributors.reduce((sum, contributor) => sum + contributor.points, 0) / contributors.length)
-                  : 0}
-              </p>
+              <p className="text-gray-500 text-sm">GitHub Contributors</p>
+              <p className="text-2xl font-bold">{githubContributors.length}</p>
             </div>
           </div>
         </div>
 
-        {/* Search and Filter */}
+        {/* Tabs and Search */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center">
-              <Medal className="mr-2 text-yellow-500" />
-              Leaderboard Rankings
-            </h2>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => setActiveTab("all")}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  activeTab === "all"
+                    ? "bg-indigo-600 text-white"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                All Contributors
+              </button>
+              <button
+                onClick={() => setActiveTab("app")}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  activeTab === "app"
+                    ? "bg-indigo-600 text-white"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                App Contributors
+              </button>
+              <button
+                onClick={() => setActiveTab("github")}
+                className={`px-4 py-2 rounded-lg font-medium flex items-center ${
+                  activeTab === "github"
+                    ? "bg-indigo-600 text-white"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                <GitBranch className="w-4 h-4 mr-2" />
+                GitHub Contributors
+              </button>
+            </div>
             <div className="w-full md:w-auto">
               <input
                 type="text"
@@ -244,13 +349,16 @@ const Contributors = () => {
                       Contributor
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Role
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Points
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Level 1 Tasks
+                      {activeTab === "github" ? "Contributions" : "Level 1 Tasks"}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Level 2 Tasks
@@ -262,28 +370,58 @@ const Contributors = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredContributors.map((contributor, index) => {
-                    const role = getContributorRole(contributor.points);
+                    // Find the actual rank in the overall list
+                    const overallRank = getAllContributors().findIndex(c => 
+                      (c._id === contributor._id) || 
+                      (c.id && contributor.id && c.id === contributor.id)
+                    );
+                    
+                    const displayRank = overallRank !== -1 ? overallRank : index;
+                    const role = getContributorRole(contributor.points, contributor.isGithubContributor);
+                    
                     return (
                       <tr 
-                        key={contributor._id} 
-                        className={`hover:bg-gray-50 transition-colors duration-150 ${index < 3 ? (index === 0 ? "bg-yellow-50" : index === 1 ? "bg-gray-100" : "bg-orange-50") : ""}`}
+                        key={contributor._id || contributor.id} 
+                        className={`hover:bg-gray-50 transition-colors duration-150 ${displayRank < 3 ? (displayRank === 0 ? "bg-yellow-50" : displayRank === 1 ? "bg-gray-100" : "bg-orange-50") : ""}`}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-lg font-bold text-gray-900">
-                            {getMedal(index)}
+                            {getMedal(displayRank)}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                              <span className="text-indigo-800 font-medium">
-                                {contributor.username.charAt(0).toUpperCase()}
-                              </span>
-                            </div>
+                            {contributor.avatar_url ? (
+                              <img 
+                                src={contributor.avatar_url} 
+                                alt={contributor.login || contributor.username} 
+                                className="h-10 w-10 rounded-full"
+                              />
+                            ) : (
+                              <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                <span className="text-indigo-800 font-medium">
+                                  {(contributor.login || contributor.username).charAt(0).toUpperCase()}
+                                </span>
+                              </div>
+                            )}
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{contributor.username}</div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {contributor.login || contributor.username}
+                              </div>
                             </div>
                           </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {contributor.isGithubContributor ? (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-black text-white">
+                              <GitBranch className="w-3 h-3 mr-1" />
+                              GitHub
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                              App
+                            </span>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${role.bgColor} ${role.color}`}>
@@ -300,19 +438,19 @@ const Contributors = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div className="flex items-center">
                             <Target className="w-4 h-4 mr-1 text-green-500" />
-                            {contributor.level1Tasks}
+                            {contributor.isGithubContributor ? contributor.contributions : contributor.level1Tasks}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div className="flex items-center">
                             <Target className="w-4 h-4 mr-1 text-blue-500" />
-                            {contributor.level2Tasks}
+                            {contributor.isGithubContributor ? Math.floor(contributor.contributions / 2) : contributor.level2Tasks}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div className="flex items-center">
                             <Target className="w-4 h-4 mr-1 text-purple-500" />
-                            {contributor.level3Tasks}
+                            {contributor.isGithubContributor ? Math.floor(contributor.contributions / 5) : contributor.level3Tasks}
                           </div>
                         </td>
                       </tr>
@@ -363,6 +501,32 @@ const Contributors = () => {
               <p className="text-purple-600 text-sm mt-2">100+ points</p>
               <p className="text-gray-600 text-sm mt-1">Top community leader</p>
             </div>
+            
+            {/* GitHub-specific roles */}
+            <div className="border border-green-200 rounded-lg p-4 bg-green-50 hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-bold text-green-700 flex items-center">
+                <Code className="w-5 h-5 mr-2" />
+                Open Source Contributor
+              </h3>
+              <p className="text-green-600 text-sm mt-2">GitHub contributors</p>
+              <p className="text-gray-600 text-sm mt-1">Contributed to the codebase</p>
+            </div>
+            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50 hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-bold text-blue-700 flex items-center">
+                <Code className="w-5 h-5 mr-2" />
+                Active Contributor
+              </h3>
+              <p className="text-blue-600 text-sm mt-2">20+ GitHub points</p>
+              <p className="text-gray-600 text-sm mt-1">Regular GitHub contributor</p>
+            </div>
+            <div className="border border-purple-200 rounded-lg p-4 bg-purple-50 hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-bold text-purple-700 flex items-center">
+                <Code className="w-5 h-5 mr-2" />
+                Core Maintainer
+              </h3>
+              <p className="text-purple-600 text-sm mt-2">50+ GitHub points</p>
+              <p className="text-gray-600 text-sm mt-1">Key project maintainer</p>
+            </div>
           </div>
         </div>
         
@@ -405,6 +569,26 @@ const Contributors = () => {
                 <li>Architecture improvements</li>
                 <li>Performance optimizations</li>
               </ul>
+            </div>
+            
+            {/* GitHub contribution info */}
+            <div className="md:col-span-3 border border-gray-200 rounded-lg p-4 bg-gray-50 mt-4">
+              <h3 className="font-bold text-gray-700 flex items-center">
+                <GitBranch className="w-5 h-5 mr-2" />
+                GitHub Contributions
+              </h3>
+              <p className="text-gray-600 text-sm mt-2">
+                Make pull requests to the{' '}
+                <a 
+                  href="https://github.com/HimanshiSh03/LearnSpace" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 hover:underline"
+                >
+                  LearnSpace repository
+                </a>{' '}
+                to appear on this leaderboard. Your contributions will be recognized based on merged pull requests.
+              </p>
             </div>
           </div>
         </div>

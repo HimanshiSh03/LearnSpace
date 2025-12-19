@@ -65,9 +65,6 @@ const Contributors = () => {
       return { name: "Open Source Contributor", color: "text-green-600", bgColor: "bg-green-100" };
     }
     
-    if (points >= 100) return { name: "Master Contributor", color: "text-purple-600", bgColor: "bg-purple-100" };
-    if (points >= 50) return { name: "Senior Contributor", color: "text-blue-600", bgColor: "bg-blue-100" };
-    if (points >= 20) return { name: "Regular Contributor", color: "text-green-600", bgColor: "bg-green-100" };
     return { name: "New Contributor", color: "text-yellow-600", bgColor: "bg-yellow-100" };
   };
 
@@ -167,7 +164,7 @@ const Contributors = () => {
 
         {/* Featured Contributor */}
         {topContributor && (
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg p-6 mb-8 text-white">
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-xl shadow-lg p-6 mb-8 text-white">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="flex-shrink-0">
                 <div className="bg-white bg-opacity-20 rounded-full p-2 w-24 h-24 flex items-center justify-center">

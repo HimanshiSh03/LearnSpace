@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Search, BookOpen, Bookmark, Star, Filter } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Books = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const navigate = useNavigate();
 
   // Sample book data
   const books = [
@@ -243,7 +245,10 @@ const Books = () => {
                       <Bookmark className="w-4 h-4 mr-1" />
                       Save
                     </button>
-                    <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <button 
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                      onClick={() => navigate(`/book/${book.id}`)}
+                    >
                       View Details
                     </button>
                   </div>

@@ -167,7 +167,11 @@ const About = () => {
               <a href={teamMembers[0].github}>
                 <Github className="hover:text-indigo-600" />
               </a>
-              <a href={teamMembers[0].linkedin}>
+              <a 
+                href={teamMembers[0].linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                >
                 <Linkedin className="hover:text-indigo-600" />
               </a>
               <a href={teamMembers[0].email}>

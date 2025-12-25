@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Trophy, Medal, Award, Users, Star, Target, Crown, Zap, HomeIcon } from "lucide-react";
+import { Trophy, Medal, Award, Users, Star, Target, Crown, Zap, HomeIcon, GitBranch, Code } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000';
 
 const Contributors = () => {
   const [contributors, setContributors] = useState([]);
+  const [githubContributors, setGithubContributors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("all"); // all, app, github
 
   useEffect(() => {
     fetchLeaderboard();
+    fetchGithubContributors();
   }, []);
 
   const fetchLeaderboard = async () => {
@@ -21,9 +24,35 @@ const Contributors = () => {
       }
       const data = await res.json();
       setContributors(data);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
+    }
+  };
+
+  const fetchGithubContributors = async () => {
+    try {
+      // Using the GitHub API to fetch contributors
+      const response = await fetch('https://api.github.com/repos/HimanshiSh03/LearnSpace/contributors');
+      if (!response.ok) {
+        throw new Error(`GitHub API error! Status: ${response.status}`);
+      }
+      const githubData = await response.json();
+      
+      // Format GitHub contributors to match our data structure
+      const formattedGithubContributors = githubData.map((contributor, index) => ({
+        ...contributor,
+        isGithubContributor: true,
+        points: Math.max(1, Math.floor(100 / (index + 1))), // Assign points based on position
+        level1Tasks: contributor.contributions, // Using GitHub contributions as level1 tasks
+        level2Tasks: Math.floor(contributor.contributions / 2),
+        level3Tasks: Math.floor(contributor.contributions / 5),
+        _id: `github-${contributor.id}`
+      }));
+      
+      setGithubContributors(formattedGithubContributors);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching GitHub contributors:", error);
       setLoading(false);
     }
   };
@@ -103,9 +132,13 @@ const Contributors = () => {
                   </div>
                   <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg min-w-[100px]">
                     <div className="font-bold text-xl">
-                      {topContributor.level1Tasks + topContributor.level2Tasks + topContributor.level3Tasks}
+                      {topContributor.isGithubContributor 
+                        ? topContributor.contributions 
+                        : topContributor.level1Tasks + topContributor.level2Tasks + topContributor.level3Tasks}
                     </div>
-                    <div className="text-sm">Tasks Completed</div>
+                    <div className="text-sm">
+                      {topContributor.isGithubContributor ? "GitHub Contributions" : "Tasks Completed"}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center justify-center sm:justify-start gap-2">
@@ -125,7 +158,7 @@ const Contributors = () => {
             </div>
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Total Contributors</p>
-              <p className="text-2xl font-bold">{contributors.length}</p>
+              <p className="text-2xl font-bold">{getAllContributors().length}</p>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
@@ -150,7 +183,7 @@ const Contributors = () => {
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
             <div className="bg-blue-100 p-3 rounded-lg">
-              <Target className="text-blue-600 w-6 h-6" />
+              <Code className="text-blue-600 w-6 h-6" />
             </div>
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Avg. Points</p>
@@ -282,6 +315,32 @@ const Contributors = () => {
               <p className="text-purple-600 text-sm mt-1">100+ points</p>
               <p className="text-gray-600 text-sm mt-1">Top community leader</p>
             </div>
+            
+            {/* GitHub-specific roles */}
+            <div className="border border-green-200 rounded-lg p-4 bg-green-50 hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-bold text-green-700 flex items-center">
+                <Code className="w-5 h-5 mr-2" />
+                Open Source Contributor
+              </h3>
+              <p className="text-green-600 text-sm mt-2">GitHub contributors</p>
+              <p className="text-gray-600 text-sm mt-1">Contributed to the codebase</p>
+            </div>
+            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50 hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-bold text-blue-700 flex items-center">
+                <Code className="w-5 h-5 mr-2" />
+                Active Contributor
+              </h3>
+              <p className="text-blue-600 text-sm mt-2">20+ GitHub points</p>
+              <p className="text-gray-600 text-sm mt-1">Regular GitHub contributor</p>
+            </div>
+            <div className="border border-purple-200 rounded-lg p-4 bg-purple-50 hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-bold text-purple-700 flex items-center">
+                <Code className="w-5 h-5 mr-2" />
+                Core Maintainer
+              </h3>
+              <p className="text-purple-600 text-sm mt-2">50+ GitHub points</p>
+              <p className="text-gray-600 text-sm mt-1">Key project maintainer</p>
+            </div>
           </div>
 
           {/* How to Earn Points */}
@@ -312,6 +371,26 @@ const Contributors = () => {
                 <li>Complex bug fixes</li>
                 <li>Community mentorship</li>
               </ul>
+            </div>
+            
+            {/* GitHub contribution info */}
+            <div className="md:col-span-3 border border-gray-200 rounded-lg p-4 bg-gray-50 mt-4">
+              <h3 className="font-bold text-gray-700 flex items-center">
+                <GitBranch className="w-5 h-5 mr-2" />
+                GitHub Contributions
+              </h3>
+              <p className="text-gray-600 text-sm mt-2">
+                Make pull requests to the{' '}
+                <a 
+                  href="https://github.com/HimanshiSh03/LearnSpace" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 hover:underline"
+                >
+                  LearnSpace repository
+                </a>{' '}
+                to appear on this leaderboard. Your contributions will be recognized based on merged pull requests.
+              </p>
             </div>
           </div>
         </div>

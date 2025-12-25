@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Kanban from "./Kanban";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
 import BookPreview from "./pages/BookPreview";
@@ -7,6 +6,7 @@ import Contributors from "./pages/Contributors";
 import About from "./pages/About";
 
 import Whiteboard from "./components/Whiteboard"; // Added Whiteboard import
+import TaskManager from "./components/TaskManager"; // Added TaskManager import
 
 //  Route Guard using localStorage
 const ProtectedRoute = ({ children }) => {
@@ -44,12 +44,12 @@ function App() {
           }
         />
 
-        {/* Kanban route - no longer protected */}
+        {/* Task Manager route */}
         <Route
           path="/kanban"
           element={
             <ProtectedRoute>
-              <Kanban />
+              <TaskManager />
             </ProtectedRoute>
           }
         />
@@ -80,16 +80,6 @@ function App() {
           element={
             <ProtectedRoute>
               <Whiteboard />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Contributors route */}
-        <Route
-          path="/contributors"
-          element={
-            <ProtectedRoute>
-              <Contributors />
             </ProtectedRoute>
           }
         />

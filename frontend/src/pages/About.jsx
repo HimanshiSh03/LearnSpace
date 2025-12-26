@@ -163,21 +163,39 @@ const About = () => {
               ))}
             </div>
 
-            <div className="flex gap-4 justify-center md:justify-start">
-              <a href={teamMembers[0].github}>
-                <Github className="hover:text-indigo-600" />
-              </a>
-              <a 
-                href={teamMembers[0].linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                >
-                <Linkedin className="hover:text-indigo-600" />
-              </a>
-              <a href={teamMembers[0].email}>
-                <Mail className="hover:text-indigo-600" />
-              </a>
-            </div>
+          <div className="flex flex-wrap gap-4 mt-6">
+            <a
+              href="https://github.com/HimanshiSh03/LearnSpace"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+      group inline-flex items-center gap-2
+      bg-gradient-to-r from-gray-800 to-gray-900
+      hover:from-gray-900 hover:to-black
+      text-white font-semibold
+      py-3 px-7 rounded-xl
+      transition-all duration-300 ease-out
+      shadow-lg hover:shadow-2xl hover:shadow-gray-900/50
+      transform hover:-translate-y-1 hover:scale-105
+      focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2
+    "
+            >
+              <Github
+                className="
+        w-5 h-5 transition-transform duration-300
+        group-hover:rotate-12 group-hover:scale-110
+      "
+              />
+              <span className="tracking-wide">View on GitHub</span>
+            </a>
+
+            <Link
+              to="/contributors"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <Users className="mr-2" />
+              See Contributors
+            </Link>
           </div>
         </div>
       </section>

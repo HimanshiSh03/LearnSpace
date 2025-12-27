@@ -220,7 +220,7 @@ const Kanban = () => {
                   ))}
 
                   {tasks.filter((task) => task.status === status).map((task, index) => (
-                    <Draggable key={task._id} draggableId={task._id} index={index + 10}>
+                    <Draggable key={task._id} draggableId={task._id} index={index}>
                       {(provided) => (
                         <div
                           ref={provided.innerRef}

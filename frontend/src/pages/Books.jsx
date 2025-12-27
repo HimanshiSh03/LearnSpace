@@ -257,7 +257,10 @@ const Books = () => {
                           <Bookmark className="w-4 h-4 mr-1" />
                           Save
                         </button>
-                        <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        <button 
+                          onClick={() => navigate(`/book/${book.id}`)}
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                        >
                           View Details
                         </button>
                       </div>

@@ -7,6 +7,7 @@ import About from "./pages/About";
 
 import Whiteboard from "./components/Whiteboard"; // Added Whiteboard import
 import TaskManager from "./components/TaskManager"; // Added TaskManager import
+import Kanban from "./Kanban"; // Added Kanban import
 
 //  Route Guard using localStorage
 const ProtectedRoute = ({ children }) => {
@@ -44,12 +45,12 @@ function App() {
           }
         />
 
-        {/* Task Manager route */}
+        {/* Kanban route */}
         <Route
           path="/kanban"
           element={
             <ProtectedRoute>
-              <TaskManager />
+              <Kanban />
             </ProtectedRoute>
           }
         />

@@ -15,9 +15,9 @@ const About = () => {
   const teamMembers = [
     {
       name: "Himanshi Sharma",
-      role: "Founder & Developer",
-      bio: "Building LearnSpace with a focus on clean UX, scalability, and open-source collaboration.",
-      skills: ["React", "Node.js", "MongoDB", "Tailwind"],
+      role: "Developer & Owner",
+      bio: "Skilled developer contributing to the LearnSpace platform, enhancing features and improving user experience.",
+      skills: ["React", "JavaScript", "NodeJS", "MongoDB"],
       github: "https://github.com/HimanshiSh03",
       linkedin: "https://www.linkedin.com/in/himanshi-sharma1009/",
       email: "mailto:himanshi03dev@gmail.com",
@@ -131,18 +131,108 @@ const About = () => {
             <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
             <p className="text-gray-600">{item.desc}</p>
           </div>
-        ))}
-      </section>
+        </div>
 
-      {/* Team Section */}
-      <section className="container mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          Meet the Creator
-        </h2>
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8">
+            Meet the Team
+          </h2>
 
-        <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-10 flex flex-col md:flex-row gap-10 items-center">
-          <div className="bg-gradient-to-br from-indigo-500 to-purple-500 text-white w-32 h-32 rounded-full flex items-center justify-center">
-            <User className="w-16 h-16" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {teamMembers.map((member, index) => (
+              <div
+                key={index}
+                className="
+          group relative
+          border border-gray-200 rounded-2xl p-6
+          bg-gradient-to-b from-white to-gray-50
+          transition-all duration-300
+          hover:-translate-y-2 hover:shadow-2xl
+          hover:border-indigo-200
+        "
+              >
+                {/* Header */}
+                <div className="flex items-center gap-4 mb-4">
+                  <div
+                    className="
+            relative flex items-center justify-center
+            w-14 h-14 rounded-full
+            bg-indigo-100
+            ring-4 ring-indigo-100/50
+            group-hover:ring-indigo-200
+            transition
+          "
+                  >
+                    <User className="text-indigo-600 w-7 h-7" />
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-800">
+                      {member.name}
+                    </h3>
+                    <p className="text-indigo-600 text-sm font-medium">
+                      {member.role}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Bio */}
+                <p className="text-gray-600 text-sm leading-relaxed mb-5">
+                  {member.bio}
+                </p>
+
+                {/* Skills */}
+                <div className="mb-5">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                    Skills
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {member.skills.map((skill, skillIndex) => (
+                      <span
+                        key={skillIndex}
+                        className="
+                  px-3 py-1 text-xs font-medium
+                  rounded-full
+                  bg-indigo-50 text-indigo-700
+                  hover:bg-indigo-100
+                  transition
+                "
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Social Links */}
+                <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
+                  <a
+                    href={member.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-500 hover:text-indigo-600 transition"
+                  >
+                    <Github className="w-5 h-5" />
+                  </a>
+
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-500 hover:text-indigo-600 transition"
+                  >
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+
+                  <a
+                    href={member.email}
+                    className="text-gray-500 hover:text-indigo-600 transition"
+                  >
+                    <Mail className="w-5 h-5" />
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="text-center md:text-left">
@@ -163,21 +253,39 @@ const About = () => {
               ))}
             </div>
 
-            <div className="flex gap-4 justify-center md:justify-start">
-              <a href={teamMembers[0].github}>
-                <Github className="hover:text-indigo-600" />
-              </a>
-              <a 
-                href={teamMembers[0].linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                >
-                <Linkedin className="hover:text-indigo-600" />
-              </a>
-              <a href={teamMembers[0].email}>
-                <Mail className="hover:text-indigo-600" />
-              </a>
-            </div>
+          <div className="flex flex-wrap gap-4 mt-6">
+            <a
+              href="https://github.com/HimanshiSh03/LearnSpace"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+      group inline-flex items-center gap-2
+      bg-gradient-to-r from-gray-800 to-gray-900
+      hover:from-gray-900 hover:to-black
+      text-white font-semibold
+      py-3 px-7 rounded-xl
+      transition-all duration-300 ease-out
+      shadow-lg hover:shadow-2xl hover:shadow-gray-900/50
+      transform hover:-translate-y-1 hover:scale-105
+      focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2
+    "
+            >
+              <Github
+                className="
+        w-5 h-5 transition-transform duration-300
+        group-hover:rotate-12 group-hover:scale-110
+      "
+              />
+              <span className="tracking-wide">View on GitHub</span>
+            </a>
+
+            <Link
+              to="/contributors"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <Users className="mr-2" />
+              See Contributors
+            </Link>
           </div>
         </div>
       </section>

@@ -1,10 +1,11 @@
 const express = require("express");
 const Contributor = require("../models/Contributor");
 const Task = require("../models/Task");
+const { fetchGithubContributors, formatGithubContributors } = require("../utils/githubUtils");
 
 const router = express.Router();
 
-// Get leaderboard data
+// Get leaderboard data (existing app contributors)
 router.get("/leaderboard", async (req, res) => {
   try {
     const contributors = await Contributor.find().sort({ points: -1 });
@@ -12,6 +13,47 @@ router.get("/leaderboard", async (req, res) => {
   } catch (error) {
     console.error("Error fetching leaderboard:", error);
     res.status(500).json({ message: "Failed to fetch leaderboard", error: error.message });
+  }
+});
+
+// Get GitHub contributors
+router.get("/github-contributors", async (req, res) => {
+  try {
+    // Fetch real GitHub contributors
+    const githubContributors = await fetchGithubContributors("HimanshiSh03", "LearnSpace");
+    
+    // Format contributors to match our data structure
+    const formattedContributors = formatGithubContributors(githubContributors);
+    
+    res.json(formattedContributors);
+  } catch (error) {
+    console.error("Error fetching GitHub contributors:", error);
+    res.status(500).json({ message: "Failed to fetch GitHub contributors", error: error.message });
+  }
+});
+
+// Combined endpoint for both app and GitHub contributors
+router.get("/all-contributors", async (req, res) => {
+  try {
+    // Get app contributors
+    const appContributors = await Contributor.find().sort({ points: -1 });
+    
+    // Fetch GitHub contributors
+    const githubContributors = await fetchGithubContributors("HimanshiSh03", "LearnSpace");
+    
+    // Format GitHub contributors
+    const formattedGithubContributors = formatGithubContributors(githubContributors);
+    
+    // Combine both arrays
+    const allContributors = [...appContributors, ...formattedGithubContributors];
+    
+    // Sort by points descending
+    allContributors.sort((a, b) => b.points - a.points);
+    
+    res.json(allContributors);
+  } catch (error) {
+    console.error("Error fetching all contributors:", error);
+    res.status(500).json({ message: "Failed to fetch all contributors", error: error.message });
   }
 });
 

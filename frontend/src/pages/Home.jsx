@@ -296,12 +296,12 @@ export default function Home() {
                 Check out our open-source project and contribute.
               </p>
               <motion.div whileHover={{ scale: 1.05 }} className="mt-4">
-                <Link
-                  to="/kanban"
+                <a
+                  href="https://github.com/HimanshiSh03/LearnSpace.git"
                   className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
                 >
                   Get Started Now
-                </Link>
+                </a>
               </motion.div>
             </motion.div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import { 
   Palette, 
@@ -15,240 +15,131 @@ import {
   ZoomOut,
   Save,
   Image as ImageIcon,
-  MousePointer
+  MousePointer,
+  Hand
 } from "lucide-react";
 
 const Whiteboard = () => {
   const canvasRef = useRef(null);
-  const contextRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [color, setColor] = useState("#000000");
-  const [brushSize, setBrushSize] = useState(5);
-  const [tool, setTool] = useState("pen"); // pen, eraser, shape, text
-  const [snapshot, setSnapshot] = useState(null);
-  const [history, setHistory] = useState([]);
-  const [historyStep, setHistoryStep] = useState(-1);
-  const [shapes, setShapes] = useState([]);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  const [elements, setElements] = useState([]);
+  const [history, setHistory] = useState([[]]);
+  const [historyStep, setHistoryStep] = useState(0);
+  const [action, setAction] = useState("none"); // none, drawing, moving, panning, resizing
+  const [tool, setTool] = useState("pen"); // pen, line, rectangle, circle, text, selection, pan
+  const [selectedElement, setSelectedElement] = useState(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [textInput, setTextInput] = useState({ active: false, x: 0, y: 0, text: "" });
-  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [points, setPoints] = useState([]); // For freehand drawing
+  const [currentElement, setCurrentElement] = useState(null);
+  
+  // Configuration state
+  const [color, setColor] = useState("#000000");
+  const [brushSize, setBrushSize] = useState(2);
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
 
-  // Initialize canvas
+  // Handle window resize
   useEffect(() => {
-    const updateCanvasSize = () => {
-      const width = window.innerWidth * 0.9;
-      const height = window.innerHeight * 0.7;
-      setCanvasSize({ width, height });
-      
-      const canvas = canvasRef.current;
-      if (canvas) {
-        canvas.width = width;
-        canvas.height = height;
-        
-        const context = canvas.getContext("2d");
-        context.lineCap = "round";
-        context.strokeStyle = color;
-        context.lineWidth = brushSize;
-        contextRef.current = context;
-
-        // Set initial background
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Redraw if we have history
-        if (historyStep >= 0 && history[historyStep]) {
-          const img = new Image();
-          img.onload = () => {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(img, 0, 0);
-          };
-          img.src = history[historyStep];
-        }
-      }
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-    updateCanvasSize();
-    window.addEventListener("resize", updateCanvasSize);
-    
-    return () => {
-      window.removeEventListener("resize", updateCanvasSize);
-    };
-  }, [history, historyStep]);
-
-  // Update context when color or brush size changes
-  useEffect(() => {
-    if (contextRef.current) {
-      contextRef.current.strokeStyle = tool === "eraser" ? "#FFFFFF" : color;
-      contextRef.current.lineWidth = brushSize;
-      contextRef.current.fillStyle = color;
-    }
-  }, [color, brushSize, tool]);
-
-  // Save current state to history
-  const saveToHistory = () => {
+  // Main drawing logic
+  useLayoutEffect(() => {
     const canvas = canvasRef.current;
-    if (canvas) {
-      const dataUrl = canvas.toDataURL();
-      const newHistory = history.slice(0, historyStep + 1);
-      newHistory.push(dataUrl);
-      setHistory(newHistory);
-      setHistoryStep(newHistory.length - 1);
-    }
-  };
-
-  const startDrawing = ({ nativeEvent }) => {
-    const { offsetX, offsetY } = nativeEvent;
+    const context = canvas.getContext("2d");
+    const { width, height } = windowSize;
     
-    if (tool === "move") {
-      setIsDragging(true);
-      setDragStart({ x: offsetX, y: offsetY });
-      return;
-    }
+    // Adjust canvas size for retina displays
+    canvas.width = width * 0.9;
+    canvas.height = height * 0.7;
     
-    if (tool === "text") {
-      setTextInput({ active: true, x: offsetX, y: offsetY, text: "" });
-      return;
-    }
-    
-    const context = contextRef.current;
-    context.beginPath();
-    context.moveTo(offsetX, offsetY);
-    setIsDrawing(true);
-    setSnapshot(context.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height));
-  };
-
-  const finishDrawing = () => {
-    if (isDrawing) {
-      contextRef.current.closePath();
-      setIsDrawing(false);
-      saveToHistory();
-    }
-    setIsDragging(false);
-  };
-
-  const draw = ({ nativeEvent }) => {
-    if (!canvasRef.current) return;
-    
-    const { offsetX, offsetY } = nativeEvent;
-    const context = contextRef.current;
-    const canvas = canvasRef.current;
-    
-    if (isDragging && tool === "move") {
-      const dx = offsetX - dragStart.x;
-      const dy = offsetY - dragStart.y;
-      setPan(prev => ({ x: prev.x + dx, y: prev.y + dy }));
-      setDragStart({ x: offsetX, y: offsetY });
-      return;
-    }
-    
-    if (!isDrawing) return;
-    
-    if (tool === "pen" || tool === "eraser") {
-      context.lineTo(offsetX, offsetY);
-      context.stroke();
-    } else if (tool === "shape") {
-      // For shape preview, we'll redraw the snapshot and draw the shape
-      context.putImageData(snapshot, 0, 0);
-      context.beginPath();
-      context.rect(dragStart.x, dragStart.y, offsetX - dragStart.x, offsetY - dragStart.y);
-      context.stroke();
-    }
-  };
-
-  const clearCanvas = () => {
-    const canvas = canvasRef.current;
-    const context = contextRef.current;
+    context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "#ffffff";
     context.fillRect(0, 0, canvas.width, canvas.height);
-    saveToHistory();
-  };
 
-  const saveCanvas = () => {
-    const canvas = canvasRef.current;
-    const link = document.createElement("a");
-    link.download = "whiteboard-drawing.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  };
+    context.save();
+    // Apply zoom and pan
+    context.translate(pan.x, pan.y);
+    context.scale(zoom, zoom);
 
-  const handleColorChange = (newColor) => {
-    setColor(newColor);
-    setTool("pen");
-  };
+    // Draw all elements
+    elements.forEach(element => {
+      drawElement(context, element);
+    });
 
-  const handleEraser = () => {
-    setTool("eraser");
-  };
+    // Draw element currently being created
+    if (action === "drawing" && currentElement) {
+       drawElement(context, currentElement);
+    }
 
-  const handlePen = () => {
-    setTool("pen");
-  };
+    context.restore();
+  }, [elements, action, currentElement, pan, zoom, windowSize]);
 
-  const handleShapeTool = () => {
-    setTool("shape");
-  };
+  // History management
+  useEffect(() => {
+    // When elements change, if it's a committed change (not dragging), update history
+    if (action === "none") {
+        // Debounce or check logic could go here, but for now we simply rely on 
+        // manual calls to saveHistory() when actions complete to avoid 
+        // excessive updates during drags
+    }
+  }, [elements, action]);
 
-  const handleTextTool = () => {
-    setTool("text");
-  };
-
-  const handleMoveTool = () => {
-    setTool("move");
+  const updateHistory = (newElements) => {
+    const newHistory = history.slice(0, historyStep + 1);
+    newHistory.push(newElements);
+    setHistory(newHistory);
+    setHistoryStep(newHistory.length - 1);
   };
 
   const undo = () => {
     if (historyStep > 0) {
-      setHistoryStep(historyStep - 1);
-      const canvas = canvasRef.current;
-      const context = contextRef.current;
-      const img = new Image();
-      img.onload = () => {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(img, 0, 0);
-      };
-      img.src = history[historyStep - 1];
+      setHistoryStep(prev => prev - 1);
+      setElements(history[historyStep - 1]);
     }
   };
 
   const redo = () => {
     if (historyStep < history.length - 1) {
-      setHistoryStep(historyStep + 1);
-      const canvas = canvasRef.current;
-      const context = contextRef.current;
-      const img = new Image();
-      img.onload = () => {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(img, 0, 0);
-      };
-      img.src = history[historyStep + 1];
+      setHistoryStep(prev => prev + 1);
+      setElements(history[historyStep + 1]);
     }
   };
 
-  const zoomIn = () => {
-    setZoom(prev => Math.min(prev + 0.1, 3));
-  };
+  const drawElement = (context, element) => {
+    const { type, x, y, width, height, points, color, strokeWidth } = element;
+    context.strokeStyle = color;
+    context.lineWidth = strokeWidth;
+    context.lineCap = "round";
+    context.lineJoin = "round";
 
-  const zoomOut = () => {
-    setZoom(prev => Math.max(prev - 0.1, 0.5));
-  };
-
-  const resetView = () => {
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
-  };
-
-  const addText = () => {
-    if (textInput.text.trim()) {
-      const context = contextRef.current;
-      context.font = `${brushSize * 4}px Arial`;
-      context.fillStyle = color;
-      context.fillText(textInput.text, textInput.x, textInput.y);
-      saveToHistory();
+    context.beginPath();
+    
+    if (type === "pen" || type === "eraser") {
+      context.strokeStyle = type === "eraser" ? "#ffffff" : color;
+      if (points.length > 0) {
+        context.moveTo(points[0].x, points[0].y);
+        points.forEach(point => context.lineTo(point.x, point.y));
+      }
+    } else if (type === "rectangle") {
+      context.strokeRect(x, y, width, height);
+    } else if (type === "circle") {
+       // Using simpler circle logic: center at x,y with radius based on width/height
+       const radiusX = Math.abs(width) / 2;
+       const radiusY = Math.abs(height) / 2;
+       context.ellipse(x + width/2, y + height/2, radiusX, radiusY, 0, 0, 2 * Math.PI);
+    } else if (type === "text") {
+       context.font = `${strokeWidth * 10}px sans-serif`;
+       context.fillStyle = color;
+       context.fillText(element.text, x, y);
+    } else if (type === "image" && element.img) {
+       context.drawImage(element.img, x, y, width, height);
     }
-    setTextInput({ active: false, x: 0, y: 0, text: "" });
+    
+    context.stroke();
   };
 
   const insertImage = (e) => {
@@ -258,10 +149,18 @@ const Whiteboard = () => {
       reader.onload = (event) => {
         const img = new Image();
         img.onload = () => {
-          const canvas = canvasRef.current;
-          const context = contextRef.current;
-          context.drawImage(img, 50, 50, 200, 200);
-          saveToHistory();
+           const id = Date.now().toString();
+           const newElement = {
+               id,
+               type: "image",
+               x: 100, // Default position
+               y: 100,
+               width: 200,
+               height: 200 * (img.height / img.width),
+               img: img // Store image object for rendering
+           };
+           setElements(prev => [...prev, newElement]);
+           updateHistory([...elements, newElement]);
         };
         img.src = event.target.result;
       };
@@ -269,247 +168,261 @@ const Whiteboard = () => {
     }
   };
 
+  const getMouseCoordinates = (event) => {
+    const clientX = event.clientX || event.touches[0].clientX;
+    const clientY = event.clientY || event.touches[0].clientY;
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    // Raw coordinates relative to canvas
+    const rawX = clientX - rect.left;
+    const rawY = clientY - rect.top;
+    // Transformed coordinates (accounting for zoom/pan)
+    return {
+      x: (rawX - pan.x) / zoom,
+      y: (rawY - pan.y) / zoom,
+      rawX, // Need raw for pan logic sometimes
+      rawY
+    };
+  };
+
+  // Check if a point is within an element (for selection)
+  const isWithinElement = (x, y, element) => {
+    const { type, x: ex, y: ey, width, height, points } = element;
+    
+    if (type === "rectangle" || type === "image") {
+      const minX = Math.min(ex, ex + width);
+      const maxX = Math.max(ex, ex + width);
+      const minY = Math.min(ey, ey + height);
+      const maxY = Math.max(ey, ey + height);
+      return x >= minX && x <= maxX && y >= minY && y <= maxY;
+    }
+    if (type === "circle") {
+       // Approximating circle hit detection as rectangle for simplicity
+      const minX = Math.min(ex, ex + width);
+      const maxX = Math.max(ex, ex + width);
+      const minY = Math.min(ey, ey + height);
+      const maxY = Math.max(ey, ey + height);
+      return x >= minX && x <= maxX && y >= minY && y <= maxY;
+    }
+    if (type === "pen") {
+        // Simple distance check to any point in the path
+        return points.some(p => Math.hypot(p.x - x, p.y - y) < 10);
+    }
+    if (type === "text") {
+        return x >= ex && x <= ex + (element.text.length * element.strokeWidth * 6) && y >= ey - 20 && y <= ey;
+    }
+    return false;
+  };
+
+  const getElementAtPosition = (x, y, elements) => {
+    return elements.map(el => ({...el, active: false}))
+                   .slice().reverse()
+                   .find(element => isWithinElement(x, y, element));
+  }; 
+
+  const handleMouseDown = (event) => {
+    const { x, y } = getMouseCoordinates(event);
+
+    if (tool === "selection") {
+      const element = getElementAtPosition(x, y, elements);
+      if (element) {
+        const offsetX = x - element.x; // Keep offset for smooth dragging
+        const offsetY = y - element.y;
+        setSelectedElement({ ...element, offsetX, offsetY });
+        setElements(prev => prev.map(el => el.id === element.id ? {...el, active: true} : el)); 
+        
+        if (element.type === "pen") {
+             // For pen, we need to offset all points
+             const offsetPoints = element.points.map(p => ({ x: x - p.x, y: y - p.y }));
+             setSelectedElement({ ...element, offsetPoints });
+        }
+        setAction("moving");
+      } else {
+        setSelectedElement(null);
+      }
+    } else if (tool === "pan") {
+      setAction("panning");
+      setPoints([{ x: event.clientX, y: event.clientY }]); // Store screen coords for panning
+    } else {
+      // creating new element
+      const id = Date.now().toString();
+      const newElement = { 
+          id, 
+          type: tool, 
+          x, 
+          y, 
+          width: 0, 
+          height: 0, 
+          color, 
+          strokeWidth: brushSize,
+          points: tool === "pen" || tool === "eraser" ? [{ x, y }] : [] 
+      };
+      // For text, we might want to handle it differently (prompt immediately)
+      if (tool === "text") {
+         const text = prompt("Enter text:");
+         if (!text) return;
+         newElement.text = text;
+         setElements(prev => [...prev, newElement]);
+         updateHistory([...elements, newElement]);
+         return; 
+      }
+      
+      setAction("drawing");
+      setCurrentElement(newElement);
+    }
+  };
+
+  const handleMouseMove = (event) => {
+    const { x, y } = getMouseCoordinates(event);
+
+    if (action === "panning") {
+      // Delta from last raw mouse position
+      const deltaX = event.clientX - points[0].x;
+      const deltaY = event.clientY - points[0].y;
+      setPan(prev => ({ x: prev.x + deltaX, y: prev.y + deltaY }));
+      setPoints([{ x: event.clientX, y: event.clientY }]); // reset reference
+      return;
+    }
+
+    if (action === "drawing") {
+      if (tool === "pen" || tool === "eraser") {
+        const newPoints = [...currentElement.points, { x, y }];
+        setCurrentElement({ ...currentElement, points: newPoints });
+      } else if (tool === "rectangle" || tool === "circle") {
+        setCurrentElement({
+          ...currentElement,
+          width: x - currentElement.x,
+          height: y - currentElement.y
+        });
+      } else if (tool === "image" && selectedElement) {
+         // Resize image if needed, for now just allow moving via selection tool, 
+         // but if we were "drawing" an image it would be dragging to resize.
+         // Current insertImage implementation adds it at fixed size.
+      }
+    } else if (action === "moving" && selectedElement) {
+        const { id, type, offsetX, offsetY, offsetPoints } = selectedElement;
+        const newX = x - offsetX;
+        const newY = y - offsetY;
+        
+        const updatedElement = {
+            ...selectedElement,
+            x: newX,
+            y: newY
+        };
+
+        if (type === "pen") {
+            updatedElement.points = selectedElement.points.map((p, i) => ({
+                x: x - offsetPoints[i].x,
+                y: y - offsetPoints[i].y
+            }));
+        }
+
+        // Live update the elements list creating a drag effect
+        const updatedElements = elements.map(el => el.id === id ? updatedElement : el);
+        setElements(updatedElements);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (action === "drawing") {
+      // Commit new element
+      if (currentElement) {
+         setElements(prev => [...prev, currentElement]);
+         updateHistory([...elements, currentElement]);
+      }
+    } else if (action === "moving") {
+       // Commit move
+       updateHistory(elements);
+    }
+    
+    setAction("none");
+    setCurrentElement(null);
+    setPoints([]); // Clear temp points
+  };
+
+  const clearCanvas = () => {
+    setElements([]);
+    updateHistory([]);
+  };
+  
+  const saveCanvas = () => {
+    const canvas = canvasRef.current;
+    const link = document.createElement("a");
+    link.download = "whiteboard.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-4 md:mb-6 gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">WHITEBOARD</h1>
-          <p className="text-gray-600 text-sm md:text-base">Draw, sketch, and brainstorm your ideas</p>
-        </div>
-        <Link 
-          to="/" 
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center gap-2"
-        >
-          <span>Back to Home</span>
-        </Link>
-      </div>
-
-      {/* Toolbar */}
-      <div className="bg-white rounded-xl shadow-lg p-4 mb-4 md:mb-6">
-        <div className="flex flex-wrap items-center gap-3 md:gap-4">
-          {/* Tool Selection */}
-          <div className="flex flex-wrap gap-1 md:gap-2 p-2 bg-gray-100 rounded-lg">
-            <button 
-              onClick={handlePen}
-              className={`p-2 rounded-lg transition-all ${tool === "pen" ? "bg-indigo-500 text-white shadow" : "bg-white hover:bg-gray-200"}`}
-              title="Pen"
-            >
-              <Palette size={18} />
-            </button>
-            <button 
-              onClick={handleEraser}
-              className={`p-2 rounded-lg transition-all ${tool === "eraser" ? "bg-indigo-500 text-white shadow" : "bg-white hover:bg-gray-200"}`}
-              title="Eraser"
-            >
-              <Eraser size={18} />
-            </button>
-            <button 
-              onClick={handleShapeTool}
-              className={`p-2 rounded-lg transition-all ${tool === "shape" ? "bg-indigo-500 text-white shadow" : "bg-white hover:bg-gray-200"}`}
-              title="Rectangle"
-            >
-              <Square size={18} />
-            </button>
-            <button 
-              onClick={handleTextTool}
-              className={`p-2 rounded-lg transition-all ${tool === "text" ? "bg-indigo-500 text-white shadow" : "bg-white hover:bg-gray-200"}`}
-              title="Text"
-            >
-              <Type size={18} />
-            </button>
-            <button 
-              onClick={handleMoveTool}
-              className={`p-2 rounded-lg transition-all ${tool === "move" ? "bg-indigo-500 text-white shadow" : "bg-white hover:bg-gray-200"}`}
-              title="Move"
-            >
-              <Move size={18} />
-            </button>
-          </div>
-
-          {/* Color Palette */}
-          <div className="flex flex-wrap gap-1 md:gap-2">
-            {["#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#ffa500"].map((c) => (
-              <button
-                key={c}
-                onClick={() => handleColorChange(c)}
-                className={`w-6 h-6 md:w-7 md:h-7 rounded-full border-2 transition-transform hover:scale-110 ${color === c && tool === "pen" ? "border-gray-800 scale-110" : "border-gray-300"}`}
-                style={{ backgroundColor: c }}
-                title={c}
-              />
-            ))}
-          </div>
-
-          {/* Brush Size */}
-          <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
-            <span className="text-xs md:text-sm font-medium text-gray-700">Size:</span>
-            <input
-              type="range"
-              min="1"
-              max="50"
-              value={brushSize}
-              onChange={(e) => setBrushSize(e.target.value)}
-              className="w-16 md:w-24"
-            />
-            <span className="text-xs md:text-sm w-6 text-gray-700">{brushSize}</span>
-          </div>
-
-          {/* Zoom Controls */}
-          <div className="flex gap-1 md:gap-2 p-2 bg-gray-100 rounded-lg">
-            <button
-              onClick={zoomIn}
-              className="p-2 rounded-lg bg-white hover:bg-gray-200 transition-colors"
-              title="Zoom In"
-            >
-              <ZoomIn size={18} />
-            </button>
-            <button
-              onClick={zoomOut}
-              className="p-2 rounded-lg bg-white hover:bg-gray-200 transition-colors"
-              title="Zoom Out"
-            >
-              <ZoomOut size={18} />
-            </button>
-            <button
-              onClick={resetView}
-              className="px-2 text-xs md:text-sm font-medium bg-white hover:bg-gray-200 rounded-lg transition-colors"
-            >
-              {Math.round(zoom * 100)}%
-            </button>
-          </div>
-
-          {/* History Controls */}
-          <div className="flex gap-1 md:gap-2 p-2 bg-gray-100 rounded-lg">
-            <button
-              onClick={undo}
-              disabled={historyStep <= 0}
-              className={`p-2 rounded-lg transition-colors ${historyStep <= 0 ? "opacity-50 cursor-not-allowed" : "bg-white hover:bg-gray-200"}`}
-              title="Undo"
-            >
-              <Undo size={18} />
-            </button>
-            <button
-              onClick={redo}
-              disabled={historyStep >= history.length - 1}
-              className={`p-2 rounded-lg transition-colors ${historyStep >= history.length - 1 ? "opacity-50 cursor-not-allowed" : "bg-white hover:bg-gray-200"}`}
-              title="Redo"
-            >
-              <Redo size={18} />
-            </button>
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-wrap gap-1 md:gap-2">
-            <button
-              onClick={clearCanvas}
-              className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors"
-            >
-              <Trash2 size={16} />
-              <span className="hidden md:inline">Clear</span>
-            </button>
-            <button
-              onClick={saveCanvas}
-              className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg transition-colors"
-            >
-              <Download size={16} />
-              <span className="hidden md:inline">Save</span>
-            </button>
-            <label className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition-colors cursor-pointer">
-              <ImageIcon size={16} />
-              <span className="hidden md:inline">Image</span>
-              <input 
-                type="file" 
-                accept="image/*" 
-                className="hidden" 
-                onChange={insertImage}
-              />
-            </label>
-          </div>
-        </div>
-      </div>
-
-      {/* Canvas Container */}
-      <div className="flex justify-center">
-        <div 
-          className="border border-gray-300 rounded-xl shadow-lg bg-gray-50 overflow-hidden relative"
-          style={{ 
-            width: canvasSize.width,
-            height: canvasSize.height,
-            cursor: tool === "move" ? "grab" : tool === "text" ? "text" : "crosshair"
-          }}
-        >
-          <canvas
-            ref={canvasRef}
-            onMouseDown={startDrawing}
-            onMouseUp={finishDrawing}
-            onMouseMove={draw}
-            className="bg-white"
-            style={{ 
-              transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-              transformOrigin: "0 0"
-            }}
-          />
-          
-          {/* Text Input Overlay */}
-          {textInput.active && (
-            <div 
-              className="absolute bg-white border border-gray-300 rounded p-2 shadow-lg"
-              style={{ 
-                left: textInput.x, 
-                top: textInput.y,
-                transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-                transformOrigin: "0 0"
-              }}
-            >
-              <input
-                type="text"
-                value={textInput.text}
-                onChange={(e) => setTextInput({...textInput, text: e.target.value})}
-                onKeyDown={(e) => e.key === 'Enter' && addText()}
-                onBlur={addText}
-                autoFocus
-                className="outline-none"
-                placeholder="Type text..."
-              />
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center">
+       {/* UI Header & Toolbar */}
+       <div className="w-full bg-white shadow-sm p-4 flex flex-wrap justify-between items-center z-10">
+          <div className="flex items-center gap-4">
+            <h1 className="text-xl font-bold text-gray-800">Whiteboard</h1>
+            <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+               <button onClick={() => setTool("selection")} className={`p-2 rounded ${tool === "selection" ? "bg-white shadow text-blue-600" : "hover:bg-gray-200"}`} title="Select & Move"><MousePointer size={18} /></button>
+               <button onClick={() => setTool("pan")} className={`p-2 rounded ${tool === "pan" ? "bg-white shadow text-blue-600" : "hover:bg-gray-200"}`} title="Pan Hand"><Hand size={18} /></button>
             </div>
-          )}
-          
-          {/* Zoom Indicator */}
-          <div className="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-            Zoom: {Math.round(zoom * 100)}%
+            
+            <div className="h-6 w-px bg-gray-300 mx-2"></div>
+            
+            <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+               <button onClick={() => setTool("pen")} className={`p-2 rounded ${tool === "pen" ? "bg-white shadow text-blue-600" : "hover:bg-gray-200"}`}><Palette size={18} /></button>
+               <button onClick={() => setTool("eraser")} className={`p-2 rounded ${tool === "eraser" ? "bg-white shadow text-blue-600" : "hover:bg-gray-200"}`}><Eraser size={18} /></button>
+               <button onClick={() => setTool("rectangle")} className={`p-2 rounded ${tool === "rectangle" ? "bg-white shadow text-blue-600" : "hover:bg-gray-200"}`}><Square size={18} /></button>
+               <button onClick={() => setTool("circle")} className={`p-2 rounded ${tool === "circle" ? "bg-white shadow text-blue-600" : "hover:bg-gray-200"}`}><Circle size={18} /></button>
+               <button onClick={() => setTool("text")} className={`p-2 rounded ${tool === "text" ? "bg-white shadow text-blue-600" : "hover:bg-gray-200"}`}><Type size={18} /></button>
+               <label className="p-2 rounded hover:bg-gray-200 cursor-pointer" title="Insert Image">
+                  <ImageIcon size={18} />
+                  <input type="file" accept="image/*" className="hidden" onChange={insertImage} />
+               </label>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Instructions */}
-      <div className="mt-6 bg-white rounded-xl shadow-lg p-4 max-w-4xl mx-auto">
-        <h3 className="font-bold text-gray-800 mb-2">Tips:</h3>
-        <ul className="text-sm text-gray-600 grid grid-cols-1 md:grid-cols-2 gap-2">
-          <li className="flex items-start gap-2">
-            <MousePointer className="w-4 h-4 mt-0.5 text-indigo-500" />
-            <span>Select tools from the toolbar above</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <Palette className="w-4 h-4 mt-0.5 text-indigo-500" />
-            <span>Choose colors and adjust brush size</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <Move className="w-4 h-4 mt-0.5 text-indigo-500" />
-            <span>Use move tool to pan around the canvas</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <ZoomIn className="w-4 h-4 mt-0.5 text-indigo-500" />
-            <span>Zoom in/out to work on details</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <Undo className="w-4 h-4 mt-0.5 text-indigo-500" />
-            <span>Undo/redo your changes</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <Save className="w-4 h-4 mt-0.5 text-indigo-500" />
-            <span>Save your work when finished</span>
-          </li>
-        </ul>
-      </div>
+          <div className="flex items-center gap-4 mt-2 md:mt-0">
+             {/* Styling Controls */}
+             <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border-0" />
+             <input type="range" min="1" max="20" value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value))} className="w-24" />
+             
+             <div className="flex gap-2">
+               <button onClick={undo} className="p-2 hover:bg-gray-100 rounded" title="Undo"><Undo size={18} /></button>
+               <button onClick={redo} className="p-2 hover:bg-gray-100 rounded" title="Redo"><Redo size={18} /></button>
+             </div>
+
+             <div className="flex gap-2">
+                 <button onClick={() => setZoom(z => Math.max(0.1, z - 0.1))} className="p-2 hover:bg-gray-100 rounded"><ZoomOut size={18} /></button>
+                 <span className="flex items-center text-sm w-12 justify-center">{Math.round(zoom * 100)}%</span>
+                 <button onClick={() => setZoom(z => Math.min(5, z + 0.1))} className="p-2 hover:bg-gray-100 rounded"><ZoomIn size={18} /></button>
+             </div>
+
+             <div className="flex gap-2">
+                <button onClick={clearCanvas} className="p-2 text-red-500 hover:bg-red-50 rounded" title="Clear All"><Trash2 size={18} /></button>
+                <button onClick={saveCanvas} className="p-2 text-green-600 hover:bg-green-50 rounded" title="Download"><Download size={18} /></button>
+             </div>
+             
+             <Link to="/" className="ml-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">Exit</Link>
+          </div>
+       </div>
+
+       {/* Canvas Area */}
+       <div className="flex-1 w-full bg-gray-100 overflow-hidden flex justify-center items-center relative cursor-crosshair">
+          <canvas
+             ref={canvasRef}
+             onMouseDown={handleMouseDown}
+             onMouseMove={handleMouseMove}
+             onMouseUp={handleMouseUp}
+             onMouseLeave={handleMouseUp}
+             onTouchStart={handleMouseDown}
+             onTouchMove={handleMouseMove}
+             onTouchEnd={handleMouseUp}
+             style={{ 
+               cursor: tool === "pan" ? (action === "panning" ? "grabbing" : "grab") : 
+                       tool === "selection" ? "default" : "crosshair",
+               boxShadow: "0 0 20px rgba(0,0,0,0.1)"
+             }}
+             className="bg-white rounded"
+          />
+       </div>
     </div>
   );
 };

@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 
 import Logo from "../components/LearnSpace logo.png";
+import Footer from "../components/Footer";
+
 
 /* ----------------------------- CONFIG DATA ----------------------------- */
 
@@ -286,7 +288,8 @@ export default function Home() {
       </div>
 
       {/* Remaining sections (bottom cards, highlights, footer) intentionally kept same in behavior and layout */}
-
+      
+      <Footer />
     </div>
   );
 }

@@ -153,10 +153,7 @@ const Kanban = () => {
     const { destination, source, draggableId } = result;
     if (!destination || destination.droppableId === source.droppableId) return;
 
-    if (draggableId.startsWith("input")) {
-      setInputs((prev) => prev.map((inp) => inp.id === draggableId ? { ...inp, location: destination.droppableId } : inp));
-      return;
-    }
+
 
     const updatedTasks = tasks.map((task) =>
       task._id === draggableId ? { ...task, status: destination.droppableId } : task
@@ -199,24 +196,20 @@ const Kanban = () => {
                 >
                   <h2 className="text-xl font-bold text-center mb-4">{col.name}</h2>
 
-                  {inputs.filter((i) => i.location === status).map((inputData, index) => (
-                    <Draggable draggableId={inputData.id} index={index} key={inputData.id}>
-                      {(provided) => (
-                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="mb-4">
-                          <div className="flex flex-col sm:flex-row items-center w-full mb-2">
-                            <input
-                              type="text"
-                              value={inputData.value}
-                              onChange={(e) => setInputs((prev) => prev.map((inp) => inp.id === inputData.id ? { ...inp, value: e.target.value } : inp))}
-                              onKeyPress={(e) => { if (e.key === 'Enter') handleAddTask(inputData.id, status); }}
-                              placeholder="Add a Task"
-                              className="p-2 border rounded-l w-full sm:flex-1 mb-2 sm:mb-0"
-                            />
-                            <button onClick={() => handleAddTask(inputData.id, status)} className="bg-blue-800 text-white font-bold px-4 py-2 rounded-r w-full sm:w-auto">+</button>
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
+                  {inputs.filter((i) => i.location === status).map((inputData) => (
+                    <div key={inputData.id} className="mb-4">
+                      <div className="flex flex-col sm:flex-row items-center w-full mb-2">
+                        <input
+                          type="text"
+                          value={inputData.value}
+                          onChange={(e) => setInputs((prev) => prev.map((inp) => inp.id === inputData.id ? { ...inp, value: e.target.value } : inp))}
+                          onKeyPress={(e) => { if (e.key === 'Enter') handleAddTask(inputData.id, status); }}
+                          placeholder="Add a Task"
+                          className="p-2 border rounded-l w-full sm:flex-1 mb-2 sm:mb-0"
+                        />
+                        <button onClick={() => handleAddTask(inputData.id, status)} className="bg-blue-800 text-white font-bold px-4 py-2 rounded-r w-full sm:w-auto">+</button>
+                      </div>
+                    </div>
                   ))}
 
                   {tasks.filter((task) => task.status === status).map((task, index) => (

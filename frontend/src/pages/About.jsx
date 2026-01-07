@@ -131,8 +131,10 @@ const About = () => {
             <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
             <p className="text-gray-600">{item.desc}</p>
           </div>
-        </div>
+        ))}
+      </section>
 
+      <section className="container mx-auto px-6 py-16">
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-8">
             Meet the Team
@@ -287,6 +289,7 @@ const About = () => {
               See Contributors
             </Link>
           </div>
+        </div>
         </div>
       </section>
 

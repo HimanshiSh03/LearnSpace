@@ -85,8 +85,7 @@ function App() {
           }
         />
 
-        {/* Owner/About route */}
-        <Route path="/owner" element={<ProtectedRoute></ProtectedRoute>} />
+
       </Routes>
     </div>
   );

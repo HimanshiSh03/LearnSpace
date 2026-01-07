@@ -40,7 +40,14 @@ const Contributors = () => {
       const data = await response.json();
       setContributors(data);
     } catch (error) {
-      console.error("Error fetching leaderboard:", error);
+      console.warn("Error fetching leaderboard (Backend likely offline), using mock data:", error);
+      // Fallback mock data for demo/offline purposes
+      setContributors([
+        { name: "HimanshiSh03", points: 1500, contributions: 50, username: "HimanshiSh03" },
+        { name: "DevUser", points: 800, contributions: 30, username: "dev_master" },
+        { name: "John Doe", points: 500, contributions: 20, username: "johndoe" },
+        { name: "Alice Smith", points: 300, contributions: 10, username: "alice_s" },
+      ]);
     }
   };
 
@@ -223,8 +230,8 @@ const Contributors = () => {
                       {topContributor.isGithubContributor
                         ? topContributor.contributions
                         : (topContributor.level1Tasks || 0) +
-                          (topContributor.level2Tasks || 0) +
-                          (topContributor.level3Tasks || 0)}
+                        (topContributor.level2Tasks || 0) +
+                        (topContributor.level3Tasks || 0)}
                     </div>
 
                     <div className="text-sm">

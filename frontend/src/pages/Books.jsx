@@ -17,7 +17,7 @@ const Books = () => {
       category: "programming",
       rating: 4.8,
       description: "A handbook of agile software craftsmanship.",
-      cover: "https://images-na.ssl-images-amazon.com/images/I/41zoxjP9lcL._SX376_BO1,204,203,200_.jpg",
+      cover: "https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg",
       pages: 464,
       level: "Intermediate"
     },
@@ -28,7 +28,7 @@ const Books = () => {
       category: "programming",
       rating: 4.7,
       description: "Elements of reusable object-oriented software.",
-      cover: "https://images-na.ssl-images-amazon.com/images/I/51kAoU8va-L._SX396_BO1,204,203,200_.jpg",
+      cover: "https://covers.openlibrary.org/b/isbn/9780201633610-L.jpg",
       pages: 416,
       level: "Advanced"
     },
@@ -39,7 +39,7 @@ const Books = () => {
       category: "productivity",
       rating: 4.8,
       description: "An easy & proven way to build good habits & break bad ones.",
-      cover: "https://images-na.ssl-images-amazon.com/images/I/51-nXsSRfZL._SX328_BO1,204,203,200_.jpg",
+      cover: "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
       pages: 320,
       level: "Beginner"
     },
@@ -50,7 +50,7 @@ const Books = () => {
       category: "productivity",
       rating: 4.5,
       description: "Rules for focused success in a distracted world.",
-      cover: "https://images-na.ssl-images-amazon.com/images/I/41rhx6d02NL._SX329_BO1,204,203,200_.jpg",
+      cover: "https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg",
       pages: 304,
       level: "Intermediate"
     },
@@ -61,7 +61,7 @@ const Books = () => {
       category: "finance",
       rating: 4.7,
       description: "Timeless lessons on wealth, greed, and happiness.",
-      cover: "https://images-na.ssl-images-amazon.com/images/I/41oYp33uD1L._SX324_BO1,204,203,200_.jpg",
+      cover: "https://covers.openlibrary.org/b/isbn/9780857197689-L.jpg",
       pages: 256,
       level: "Beginner"
     },
@@ -72,7 +72,7 @@ const Books = () => {
       category: "history",
       rating: 4.6,
       description: "A brief history of humankind.",
-      cover: "https://images-na.ssl-images-amazon.com/images/I/41lZKXt1%2BML._SX333_BO1,204,203,200_.jpg",
+      cover: "https://covers.openlibrary.org/b/isbn/9780062316097-L.jpg",
       pages: 443,
       level: "Beginner"
     }

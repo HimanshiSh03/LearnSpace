@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 
 import Logo from "../components/LearnSpace logo.png";
+import Footer from "../components/Footer";
+
 
 /* ----------------------------- CONFIG DATA ----------------------------- */
 
@@ -82,9 +84,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+      
       {/* Navbar */}
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-indigo-100">
+      <nav className="sticky top-0 z-50 backdrop-blur-md bg-indigo-100 border-b border-indigo-100">
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
 
           <div className="flex items-center gap-3">
@@ -286,7 +288,8 @@ export default function Home() {
       </div>
 
       {/* Remaining sections (bottom cards, highlights, footer) intentionally kept same in behavior and layout */}
-
+      
+      <Footer />
     </div>
   );
 }

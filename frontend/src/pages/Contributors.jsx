@@ -11,6 +11,19 @@ const Contributors = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all"); // all, app, github
 
+  // Combine all contributors based on active tab
+  const getAllContributors = () => {
+    if (activeTab === "github") {
+      return githubContributors;
+    } else if (activeTab === "app") {
+      return contributors;
+    } else {
+      // Combine both lists and sort by points
+      const all = [...contributors, ...githubContributors];
+      return all.sort((a, b) => b.points - a.points);
+    }
+  };
+
   useEffect(() => {
     fetchLeaderboard();
     fetchGithubContributors();
@@ -71,8 +84,10 @@ const Contributors = () => {
     return `#${index + 1}`;
   };
 
-  const filteredContributors = contributors.filter(contributor =>
-    contributor.username.toLowerCase().includes(searchTerm.toLowerCase())
+  const allContributors = getAllContributors();
+  
+  const filteredContributors = allContributors.filter(contributor =>
+    (contributor.username || contributor.login || contributor.name).toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -86,7 +101,7 @@ const Contributors = () => {
     );
   }
 
-  const topContributor = contributors.length > 0 ? contributors[0] : null;
+  const topContributor = allContributors.length > 0 ? allContributors[0] : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
@@ -124,7 +139,7 @@ const Contributors = () => {
                   <Trophy className="text-yellow-300" />
                   <h2 className="text-xl sm:text-2xl font-bold">Featured Contributor</h2>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-bold mb-2 truncate">{topContributor.username}</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold mb-2 truncate">{topContributor.username || topContributor.login || topContributor.name}</h3>
                 <div className="flex flex-wrap gap-4 justify-center sm:justify-start mb-3">
                   <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg min-w-[100px]">
                     <div className="font-bold text-xl">{topContributor.points}</div>
@@ -134,7 +149,7 @@ const Contributors = () => {
                     <div className="font-bold text-xl">
                       {topContributor.isGithubContributor 
                         ? topContributor.contributions 
-                        : topContributor.level1Tasks + topContributor.level2Tasks + topContributor.level3Tasks}
+                        : (topContributor.level1Tasks || 0) + (topContributor.level2Tasks || 0) + (topContributor.level3Tasks || 0)}
                     </div>
                     <div className="text-sm">
                       {topContributor.isGithubContributor ? "GitHub Contributions" : "Tasks Completed"}
@@ -158,7 +173,7 @@ const Contributors = () => {
             </div>
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Total Contributors</p>
-              <p className="text-2xl font-bold">{getAllContributors().length}</p>
+              <p className="text-2xl font-bold">{allContributors.length}</p>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
@@ -167,7 +182,7 @@ const Contributors = () => {
             </div>
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Top Contributor</p>
-              <p className="text-2xl font-bold truncate">{contributors.length > 0 ? contributors[0].username : "N/A"}</p>
+              <p className="text-2xl font-bold truncate">{allContributors.length > 0 ? (allContributors[0].username || allContributors[0].login || allContributors[0].name) : "N/A"}</p>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 flex items-center hover:shadow-xl transition-shadow duration-300">
@@ -177,7 +192,7 @@ const Contributors = () => {
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Total Points</p>
               <p className="text-2xl font-bold">
-                {contributors.reduce((sum, c) => sum + c.points, 0)}
+                {allContributors.reduce((sum, c) => sum + (c.points || 0), 0)}
               </p>
             </div>
           </div>
@@ -188,27 +203,51 @@ const Contributors = () => {
             <div className="ml-4">
               <p className="text-gray-500 text-sm">Avg. Points</p>
               <p className="text-2xl font-bold">
-                {contributors.length > 0 
-                  ? Math.round(contributors.reduce((sum, c) => sum + c.points, 0) / contributors.length)
+                {allContributors.length > 0 
+                  ? Math.round(allContributors.reduce((sum, c) => sum + (c.points || 0), 0) / allContributors.length)
                   : 0}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Search */}
-        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center">
-            <Medal className="mr-2 text-yellow-500" />
-            Leaderboard Rankings
-          </h2>
-          <input
-            type="text"
-            placeholder="Search contributors..."
-            className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        {/* Search and Tab Controls */}
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center">
+              <Medal className="mr-2 text-yellow-500" />
+              Leaderboard Rankings
+            </h2>
+            <input
+              type="text"
+              placeholder="Search contributors..."
+              className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          
+          {/* Tab Selector */}
+          <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
+            <button
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${activeTab === "all" ? "bg-white text-indigo-600 shadow-sm" : "text-gray-600 hover:text-gray-800"}`}
+              onClick={() => setActiveTab("all")}
+            >
+              All
+            </button>
+            <button
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${activeTab === "app" ? "bg-white text-indigo-600 shadow-sm" : "text-gray-600 hover:text-gray-800"}`}
+              onClick={() => setActiveTab("app")}
+            >
+              App Contributors
+            </button>
+            <button
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${activeTab === "github" ? "bg-white text-indigo-600 shadow-sm" : "text-gray-600 hover:text-gray-800"}`}
+              onClick={() => setActiveTab("github")}
+            >
+              GitHub Contributors
+            </button>
+          </div>
         </div>
 
         {/* Leaderboard Table */}
@@ -247,17 +286,17 @@ const Contributors = () => {
                   const role = getContributorRole(contributor.points);
                   return (
                     <tr 
-                      key={contributor._id} 
+                      key={contributor._id || contributor.id || contributor.login} 
                       className={`hover:bg-gray-50 transition-colors duration-150 ${index < 3 ? (index === 0 ? "bg-yellow-50" : index === 1 ? "bg-gray-100" : "bg-orange-50") : ""}`}
                     >
                       <td className="px-3 sm:px-6 py-2 whitespace-nowrap text-sm sm:text-base font-bold">{getMedal(index)}</td>
                       <td className="px-3 sm:px-6 py-2 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-indigo-100 flex items-center justify-center text-sm sm:text-base font-medium text-indigo-800">
-                            {contributor.username.charAt(0).toUpperCase()}
+                            {(contributor.username || contributor.login || contributor.name)?.charAt(0).toUpperCase()}
                           </div>
                           <div className="ml-2 sm:ml-4">
-                            <div className="text-sm sm:text-base font-medium text-gray-900 truncate">{contributor.username}</div>
+                            <div className="text-sm sm:text-base font-medium text-gray-900 truncate">{contributor.username || contributor.login || contributor.name}</div>
                           </div>
                         </div>
                       </td>

@@ -189,7 +189,12 @@ export default function Home() {
               <h3 className="text-xl font-bold mt-4">GitHub Repository</h3>
               <p className="text-gray-600 text-center mt-2">Check out our open-source project and contribute.</p>
               <motion.div whileHover={{ scale: 1.05 }} className="mt-4">
-                <Link to="/kanban" className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200">Get Started Now</Link>
+                <a
+                  href="https://github.com/HimanshiSh03/LearnSpace.git"
+                  className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+                >
+                  Get Started Now
+                </a>
               </motion.div>
             </motion.div>
           </div>

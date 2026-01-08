@@ -85,6 +85,15 @@ function App() {
           }
         />
 
+        {/* TaskManager route */}
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <TaskManager />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
     </div>

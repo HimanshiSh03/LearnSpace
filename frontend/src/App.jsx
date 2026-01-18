@@ -86,6 +86,15 @@ function App() {
           }
         />
 
+        {/* TaskManager route */}
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <TaskManager />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Feedback route */}
         <Route path="/feedback" element={<Feedback />} />

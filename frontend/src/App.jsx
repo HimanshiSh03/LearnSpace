@@ -4,6 +4,7 @@ import Books from "./pages/Books";
 import BookPreview from "./pages/BookPreview";
 import Contributors from "./pages/Contributors";
 import About from "./pages/About";
+import Feedback from "./pages/Feedback";
 
 import Whiteboard from "./components/Whiteboard"; // Added Whiteboard import
 import TaskManager from "./components/TaskManager"; // Added TaskManager import
@@ -85,8 +86,18 @@ function App() {
           }
         />
 
-        {/* Owner/About route */}
-        <Route path="/owner" element={<ProtectedRoute></ProtectedRoute>} />
+        {/* TaskManager route */}
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <TaskManager />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Feedback route */}
+        <Route path="/feedback" element={<Feedback />} />
       </Routes>
     </div>
   );

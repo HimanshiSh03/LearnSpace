@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 import {
   Book,
@@ -16,6 +17,8 @@ import {
 } from "lucide-react";
 
 import Logo from "../components/LearnSpace logo.png";
+import Footer from "../components/Footer";
+
 
 /* ----------------------------- CONFIG DATA ----------------------------- */
 
@@ -77,11 +80,13 @@ const FEATURES = [
 /* ----------------------------- COMPONENT ----------------------------- */
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+      
       {/* Navbar */}
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-indigo-100">
+      <nav className="sticky top-0 z-50 backdrop-blur-md bg-indigo-100 border-b border-indigo-100">
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
 
           <div className="flex items-center gap-3">
@@ -110,7 +115,7 @@ export default function Home() {
 
           {/* CTA Button (Desktop) */}
           <div className="hidden md:block">
-            <button className="px-5 py-2 rounded-xl bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all">
+            <button onClick={() => navigate('/kanban')} className="px-5 py-2 rounded-xl bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all">
               Get Started
             </button>
           </div>
@@ -153,7 +158,14 @@ export default function Home() {
                 </Link>
               ))}
               <div className="pt-4">
-                <button className="w-full px-5 py-3 rounded-xl bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all">
+                <button
+                  type="button"  
+                  onClick={() => {
+                    navigate('/kanban');
+                    setMenuOpen(false);
+                  }}
+                  className="w-full px-5 py-3 rounded-xl bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all"
+                >
                   Get Started
                 </button>
               </div>
@@ -276,7 +288,8 @@ export default function Home() {
       </div>
 
       {/* Remaining sections (bottom cards, highlights, footer) intentionally kept same in behavior and layout */}
-
+      
+      <Footer />
     </div>
   );
 }

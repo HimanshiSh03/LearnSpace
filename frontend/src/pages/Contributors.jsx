@@ -16,6 +16,8 @@ import {
 
 const API_URL = import.meta.env.VITE_APP_API_URL || "http://localhost:3000";
 
+import ThemeToggle from "../components/ThemeToggle";
+
 const Contributors = () => {
   const [contributors, setContributors] = useState([]);
   const [githubContributors, setGithubContributors] = useState([]);
@@ -154,10 +156,10 @@ const Contributors = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="flex flex-col items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-          <p className="mt-4 text-gray-600 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-300 text-center">
             Loading contributors...
           </p>
         </div>
@@ -166,29 +168,32 @@ const Contributors = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 flex items-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white flex items-center">
               <Trophy className="mr-2 text-yellow-500" />
               Contributors Leaderboard
             </h1>
 
-            <p className="text-gray-600 mt-1 text-sm sm:text-base">
+            <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">
               Meet the amazing people helping improve LearnSpace
             </p>
           </div>
 
-          <Link
-            to="/"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center text-sm sm:text-base"
-          >
-            <HomeIcon className="w-4 h-4 mr-2" />
-            Back to Home
-          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <Link
+              to="/"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center text-sm sm:text-base"
+            >
+              <HomeIcon className="w-4 h-4 mr-2" />
+              Back to Home
+            </Link>
+          </div>
         </div>
 
         {/* FEATURED CONTRIBUTOR */}

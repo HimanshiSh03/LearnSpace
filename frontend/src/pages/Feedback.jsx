@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Send, Star, ArrowLeft } from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function Feedback() {
   const [rating, setRating] = useState(0);
@@ -11,17 +12,20 @@ export default function Feedback() {
     e.preventDefault();
     console.log("Feedback submitted:", { ...formData, rating });
     setSubmitted(true);
-    
+
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
       <div className="w-full max-w-2xl">
-        <Link to="/" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-8 transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
-        </Link>
-        
+        <div className="flex justify-between items-center mb-8">
+          <Link to="/" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </Link>
+          <ThemeToggle />
+        </div>
+
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="bg-indigo-500 px-8 py-6">
             <h1 className="text-3xl font-extrabold text-white">We'd Love Your Feedback!</h1>

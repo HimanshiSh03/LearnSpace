@@ -18,6 +18,7 @@ import {
 
 import Logo from "../components/LearnSpace logo.png";
 import Footer from "../components/Footer";
+import ThemeToggle from "../components/ThemeToggle";
 
 
 /* ----------------------------- CONFIG DATA ----------------------------- */
@@ -83,10 +84,10 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
-      
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800">
+
       {/* Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-indigo-100 border-b border-indigo-100">
+      <nav className="sticky top-0 z-50 backdrop-blur-md bg-indigo-100/80 dark:bg-gray-800/80 border-b border-indigo-100 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
 
           <div className="flex items-center gap-3">
@@ -106,25 +107,27 @@ export default function Home() {
               <Link
                 key={item.name}
                 to={item.path}
-                className="relative text-gray-600 hover:text-indigo-600 transition-colors after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-indigo-600 hover:after:w-full after:transition-all"
+                className="relative text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-indigo-600 dark:after:bg-indigo-400 hover:after:w-full after:transition-all"
               >
                 {item.name}
               </Link>
             ))}
           </div>
 
-          {/* CTA Button (Desktop) */}
-          <div className="hidden md:block">
+          {/* CTA Button & Theme Toggle (Desktop) */}
+          <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
             <button onClick={() => navigate('/kanban')} className="px-5 py-2 rounded-xl bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all">
               Get Started
             </button>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <div className="md:hidden flex items-center">
+          {/* Mobile Menu Toggle & Theme */}
+          <div className="md:hidden flex items-center gap-3">
+            <ThemeToggle />
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="text-gray-600 hover:text-indigo-600 focus:outline-none"
+              className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none"
             >
               {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -137,7 +140,7 @@ export default function Home() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-indigo-100 shadow-lg"
+            className="md:hidden bg-white dark:bg-gray-800 border-t border-indigo-100 dark:border-gray-700 shadow-lg"
           >
             <div className="flex flex-col px-6 py-4 space-y-4">
               {[
@@ -152,14 +155,14 @@ export default function Home() {
                   key={item.name}
                   to={item.path}
                   onClick={() => setMenuOpen(false)}
-                  className="text-gray-600 hover:text-indigo-600 font-medium text-lg transition-colors"
+                  className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium text-lg transition-colors"
                 >
                   {item.name}
                 </Link>
               ))}
               <div className="pt-4">
                 <button
-                  type="button"  
+                  type="button"
                   onClick={() => {
                     navigate('/kanban');
                     setMenuOpen(false);
@@ -252,10 +255,10 @@ export default function Home() {
       <div className="mt-20 md:mt-24 px-4 md:px-8">
         <div className="container mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold text-gray-800">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
               Powerful Features for Modern Learners
             </h2>
-            <p className="text-lg text-gray-600 mt-4">
+            <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
               Everything you need to organize, learn, and grow in one unified platform.
             </p>
           </div>
@@ -268,17 +271,17 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg flex flex-col items-center text-center hover:shadow-xl transition-all"
+                className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-lg flex flex-col items-center text-center hover:shadow-xl dark:hover:shadow-indigo-500/20 transition-all"
               >
-                <div className="bg-indigo-100 p-4 rounded-full text-indigo-600">
+                <div className="bg-indigo-100 dark:bg-indigo-900/50 p-4 rounded-full text-indigo-600 dark:text-indigo-400">
                   {feature.icon}
                 </div>
 
-                <h3 className="text-xl font-bold mt-6">
+                <h3 className="text-xl font-bold mt-6 dark:text-gray-100">
                   {feature.title}
                 </h3>
 
-                <p className="text-gray-600 mt-3">
+                <p className="text-gray-600 dark:text-gray-400 mt-3">
                   {feature.description}
                 </p>
               </motion.div>
@@ -288,7 +291,7 @@ export default function Home() {
       </div>
 
       {/* Remaining sections (bottom cards, highlights, footer) intentionally kept same in behavior and layout */}
-      
+
       <Footer />
     </div>
   );

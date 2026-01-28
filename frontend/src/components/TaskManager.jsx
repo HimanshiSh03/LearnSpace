@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import ThemeToggle from "./ThemeToggle";
 
 const API_URL = import.meta.env.VITE_APP_API_URL || "http://localhost:3000";
 
@@ -16,7 +17,7 @@ const TaskManager = () => {
 
   const [editingTask, setEditingTask] = useState(null);
   const [filter, setFilter] = useState("all");
-  
+
   // Sorting and Filtering State
   const [sortBy, setSortBy] = useState("date"); // "priority", "date", "status"
   const [sortOrder, setSortOrder] = useState("desc"); // "asc", "desc"
@@ -194,8 +195,8 @@ const TaskManager = () => {
 
   const sortedAndFilteredTasks = useMemo(() => {
     // First filter by status
-    let result = statusFilter === "all" 
-      ? tasks 
+    let result = statusFilter === "all"
+      ? tasks
       : tasks.filter((task) => task.status === statusFilter);
 
     // Then sort by selected criteria
@@ -243,12 +244,15 @@ const TaskManager = () => {
             </p>
           </div>
 
-          <a
-            href="/"
-            className="mt-4 md:mt-0 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center"
-          >
-            ← Back to Home
-          </a>
+          <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <ThemeToggle />
+            <a
+              href="/"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center"
+            >
+              ← Back to Home
+            </a>
+          </div>
         </div>
 
         {/* STATS */}
@@ -262,7 +266,7 @@ const TaskManager = () => {
         {/* FILTER & SORT CONTROLS */}
         <div className="bg-white rounded-xl shadow-md p-4 mb-6">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-            
+
             {/* Status Filter Buttons */}
             <div className="flex flex-wrap gap-2">
               <span className="text-sm font-semibold text-gray-700 mr-2 flex items-center">Filter:</span>
@@ -275,11 +279,10 @@ const TaskManager = () => {
                 <button
                   key={filterOption.value}
                   onClick={() => setStatusFilter(filterOption.value)}
-                  className={`px-4 py-2 rounded-lg font-medium transition duration-200 ${
-                    statusFilter === filterOption.value
+                  className={`px-4 py-2 rounded-lg font-medium transition duration-200 ${statusFilter === filterOption.value
                       ? "bg-indigo-600 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
                   {filterOption.label}
                   {statusFilter === filterOption.value && (
@@ -301,7 +304,7 @@ const TaskManager = () => {
                 <option value="priority">Priority</option>
                 <option value="status">Status</option>
               </select>
-              
+
               <button
                 onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
                 className="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition duration-200 flex items-center gap-1"
@@ -397,7 +400,7 @@ const TaskManager = () => {
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No tasks found</p>
               <p className="text-gray-400 text-sm mt-2">
-                {statusFilter !== "all" 
+                {statusFilter !== "all"
                   ? "Try changing the filter or add a new task"
                   : "Add a new task to get started"}
               </p>
@@ -473,34 +476,32 @@ const TaskManager = () => {
                             {task.description}
                           </p>
                         )}
-                        
+
                         {/* Status Badge */}
                         <div className="flex flex-wrap gap-2 mb-2">
                           <span
-                            className={`px-2 py-1 rounded text-xs font-semibold ${
-                              task.status === "done"
+                            className={`px-2 py-1 rounded text-xs font-semibold ${task.status === "done"
                                 ? "bg-green-100 text-green-700"
                                 : task.status === "inprogress"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : "bg-red-100 text-red-700"
-                            }`}
+                                  ? "bg-yellow-100 text-yellow-700"
+                                  : "bg-red-100 text-red-700"
+                              }`}
                           >
                             {task.status === "todo"
                               ? "To Do"
                               : task.status === "inprogress"
-                              ? "In Progress"
-                              : "Done"}
+                                ? "In Progress"
+                                : "Done"}
                           </span>
 
                           {/* Priority Badge */}
                           <span
-                            className={`px-2 py-1 rounded text-xs font-semibold ${
-                              task.priority === "High"
+                            className={`px-2 py-1 rounded text-xs font-semibold ${task.priority === "High"
                                 ? "bg-red-100 text-red-700"
                                 : task.priority === "Medium"
-                                ? "bg-orange-100 text-orange-700"
-                                : "bg-green-100 text-green-700"
-                            }`}
+                                  ? "bg-orange-100 text-orange-700"
+                                  : "bg-green-100 text-green-700"
+                              }`}
                           >
                             {task.priority}
                           </span>

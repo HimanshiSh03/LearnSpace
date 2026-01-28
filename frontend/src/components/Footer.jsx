@@ -5,7 +5,7 @@ import Logo from "./LearnSpace logo.png"; // Assuming logo is in the same direct
 
 const Footer = () => {
   return (
-    <footer className="bg-indigo-50 border-t border-indigo-100 pt-16 pb-8 mt-12">
+    <footer className="bg-indigo-50 dark:bg-gray-800 border-t border-indigo-100 dark:border-gray-700 pt-16 pb-8 mt-12">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand Column */}
@@ -16,58 +16,58 @@ const Footer = () => {
                 LearnSpace
               </div>
             </div>
-            <p className="text-gray-500 leading-relaxed">
+            <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
               Empowering learners with tools to organize, track, and master their educational journey.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-bold text-gray-800 mb-6">Platform</h4>
+            <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-6">Platform</h4>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-gray-500 hover:text-indigo-600 transition-colors">Home</Link></li>
-              <li><Link to="/kanban" className="text-gray-500 hover:text-indigo-600 transition-colors">Kanban Board</Link></li>
-              <li><Link to="/books" className="text-gray-500 hover:text-indigo-600 transition-colors">BookSpace</Link></li>
-              <li><Link to="/whiteboard" className="text-gray-500 hover:text-indigo-600 transition-colors">Whiteboard</Link></li>
+              <li><Link to="/" className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Home</Link></li>
+              <li><Link to="/kanban" className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Kanban Board</Link></li>
+              <li><Link to="/books" className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">BookSpace</Link></li>
+              <li><Link to="/whiteboard" className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Whiteboard</Link></li>
             </ul>
           </div>
 
           {/* Community */}
           <div>
-            <h4 className="font-bold text-gray-800 mb-6">Community</h4>
+            <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-6">Community</h4>
             <ul className="space-y-3">
-              <li><Link to="/contributors" className="text-gray-500 hover:text-indigo-600 transition-colors">Contributors</Link></li>
-              <li><Link to="/about-us" className="text-gray-500 hover:text-indigo-600 transition-colors">About Us</Link></li>
-              <li><a href="#" className="text-gray-500 hover:text-indigo-600 transition-colors">Join Discord</a></li>
-              <li><Link to="/feedback" className="text-gray-500 hover:text-indigo-600 transition-colors">Feedback</Link></li>
+              <li><Link to="/contributors" className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contributors</Link></li>
+              <li><Link to="/about-us" className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About Us</Link></li>
+              <li><a href="#" className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Join Discord</a></li>
+              <li><Link to="/feedback" className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Feedback</Link></li>
             </ul>
           </div>
 
           {/* Connect */}
           <div>
-            <h4 className="font-bold text-gray-800 mb-6">Connect</h4>
+            <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-6">Connect</h4>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
+              <a href="#" className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-gray-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-all">
                 <Github size={20} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
+              <a href="#" className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-gray-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-all">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
+              <a href="#" className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-gray-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-all">
                 <Linkedin size={20} />
               </a>
-               <a href="#" className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
+              <a href="#" className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-gray-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-all">
                 <Mail size={20} />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-indigo-50 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-sm">
+        <div className="border-t border-indigo-50 dark:border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-400 dark:text-gray-500 text-sm">
             © {new Date().getFullYear()} LearnSpace. All rights reserved.
           </p>
-          <div className="flex items-center gap-2 text-sm text-gray-400">
+          <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500">
             <span>Made with</span>
             <Heart size={16} className="text-red-500 fill-red-500" />
             <span>by LearnSpace Team</span>

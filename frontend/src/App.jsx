@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { ThemeProvider } from "./context/ThemeContext";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
 import BookPreview from "./pages/BookPreview";
@@ -21,85 +22,87 @@ function App() {
   localStorage.setItem("isLoggedIn", "true");
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about-us" element={<About />} />
+    <ThemeProvider>
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about-us" element={<About />} />
 
-        {/* Contributors route */}
-        <Route
-          path="/contributors"
-          element={
-            <ProtectedRoute>
-              <Contributors />
-            </ProtectedRoute>
-          }
-        />
+          {/* Contributors route */}
+          <Route
+            path="/contributors"
+            element={
+              <ProtectedRoute>
+                <Contributors />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* About/Owner route */}
-        <Route
-          path="/owner"
-          element={
-            <ProtectedRoute>
-              <About />
-            </ProtectedRoute>
-          }
-        />
+          {/* About/Owner route */}
+          <Route
+            path="/owner"
+            element={
+              <ProtectedRoute>
+                <About />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Kanban route */}
-        <Route
-          path="/kanban"
-          element={
-            <ProtectedRoute>
-              <Kanban />
-            </ProtectedRoute>
-          }
-        />
+          {/* Kanban route */}
+          <Route
+            path="/kanban"
+            element={
+              <ProtectedRoute>
+                <Kanban />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Books route */}
-        <Route
-          path="/books"
-          element={
-            <ProtectedRoute>
-              <Books />
-            </ProtectedRoute>
-          }
-        />
+          {/* Books route */}
+          <Route
+            path="/books"
+            element={
+              <ProtectedRoute>
+                <Books />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Book Preview route */}
-        <Route
-          path="/book/:id"
-          element={
-            <ProtectedRoute>
-              <BookPreview />
-            </ProtectedRoute>
-          }
-        />
+          {/* Book Preview route */}
+          <Route
+            path="/book/:id"
+            element={
+              <ProtectedRoute>
+                <BookPreview />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Whiteboard route */}
-        <Route
-          path="/whiteboard"
-          element={
-            <ProtectedRoute>
-              <Whiteboard />
-            </ProtectedRoute>
-          }
-        />
+          {/* Whiteboard route */}
+          <Route
+            path="/whiteboard"
+            element={
+              <ProtectedRoute>
+                <Whiteboard />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* TaskManager route */}
-        <Route
-          path="/tasks"
-          element={
-            <ProtectedRoute>
-              <TaskManager />
-            </ProtectedRoute>
-          }
-        />
+          {/* TaskManager route */}
+          <Route
+            path="/tasks"
+            element={
+              <ProtectedRoute>
+                <TaskManager />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Feedback route */}
-        <Route path="/feedback" element={<Feedback />} />
-      </Routes>
-    </div>
+          {/* Feedback route */}
+          <Route path="/feedback" element={<Feedback />} />
+        </Routes>
+      </div>
+    </ThemeProvider>
   );
 }
 

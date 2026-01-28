@@ -1,25 +1,50 @@
-
 @import "tailwindcss";
-/* LearnSpace Theme Background */
-.learnspace-bg {
-  background: radial-gradient(circle at 20% 20%, #dbe4ff, #ffffff 60%);
-  position: relative;
+
+/* Force dark mode to rely on the .dark class */
+@variant dark (&:where(.dark, .dark *));
+
+/* ============================= THEME VARIABLES ============================= */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-gradient-start: #e0e7ff;
+  --bg-gradient-end: #ffffff;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: rgba(255, 255, 255, 0.45);
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glow-color-1: rgba(99, 102, 241, 0.35);
+  --glow-color-2: rgba(168, 85, 247, 0.25);
 }
 
-.learnspace-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url("https://grainy-gradients.vercel.app/noise.png");
-  opacity: 0.2;
-  pointer-events: none;
+.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-gradient-start: #1e1b4b;
+  --bg-gradient-end: #0f172a;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --border-color: rgba(71, 85, 105, 0.45);
+  --glass-bg: rgba(30, 41, 59, 0.45);
+  --glow-color-1: rgba(99, 102, 241, 0.5);
+  --glow-color-2: rgba(168, 85, 247, 0.4);
 }
+
+/* Smooth theme transition */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 /* --- AnimateItNow Premium Background --- */
 
 .learnspace-bg {
   position: relative;
   overflow: hidden;
   background: radial-gradient(circle at 30% 30%, #e0e7ff, #ffffff 60%);
+}
+
+.dark .learnspace-bg {
+  background: radial-gradient(circle at 30% 30%, #1e1b4b, #0f172a 60%);
 }
 
 /* Grain */
@@ -34,13 +59,18 @@
   pointer-events: none;
 }
 
+.dark .learnspace-bg::before {
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+}
+
 /* Soft glowing blob 1 */
 .learnspace-bg::after {
   content: "";
   position: absolute;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(99,102,241,0.35), transparent 70%);
+  background: radial-gradient(circle, var(--glow-color-1), transparent 70%);
   top: -200px;
   right: -150px;
   filter: blur(100px);
@@ -54,7 +84,7 @@
   position: absolute;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168,85,247,0.25), transparent 70%);
+  background: radial-gradient(circle, var(--glow-color-2), transparent 70%);
   bottom: -150px;
   left: -150px;
   filter: blur(120px);
@@ -65,26 +95,45 @@
 
 /* Animation */
 @keyframes float1 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(-80px, 60px) scale(1.15); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(-80px, 60px) scale(1.15);
+  }
 }
 
 @keyframes float2 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(90px, -70px) scale(1.2); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(90px, -70px) scale(1.2);
+  }
 }
 
 /* Glass card effect */
 .glass-card {
-  background: rgba(255, 255, 255, 0.45);
+  background: var(--glass-bg);
   backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--border-color);
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
   transition: 0.25s ease;
 }
 
-.glass-card:hover {
-  transform: translateY(-6px) scale(1.04);
-  border-color: rgba(255,255,255,0.8);
+.dark .glass-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
 }
 
+.glass-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.dark .glass-card:hover {
+  border-color: rgba(139, 92, 246, 0.6);
+}

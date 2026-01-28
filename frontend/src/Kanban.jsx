@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import ThemeToggle from "./components/ThemeToggle";
 
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:3000';
 
@@ -49,8 +50,8 @@ const Kanban = () => {
       const res = await fetch(`${API_URL}/api/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          title, 
+        body: JSON.stringify({
+          title,
           status,
           description: "",
           assignedUser: "Unassigned",
@@ -170,17 +171,20 @@ const Kanban = () => {
       if (!res.ok) throw new Error("Failed to update task on drag");
     } catch (error) {
       console.error("Error updating task status on drag and drop:", error);
-      setTasks(tasks); 
+      setTasks(tasks);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-10">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-6 lg:p-10 text-gray-900 dark:text-gray-100">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h1 className="text-3xl font-bold">TASK MANAGER</h1>
-        <a href="/dashboard" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
-          Dashboard
-        </a>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <a href="/dashboard" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+            Dashboard
+          </a>
+        </div>
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Star, Bookmark, Download, Eye, ThumbsUp, MessageCircle, Share2, BookOpen } from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 
 const BookPreview = () => {
   const { id } = useParams();
@@ -171,11 +172,12 @@ const BookPreview = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       {/* Back Button */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
         <Link to="/books" className="flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Books
         </Link>
+        <ThemeToggle />
       </div>
 
       {/* Book Header */}
@@ -302,7 +304,7 @@ const BookPreview = () => {
                       <Star
                         key={i}
                         className={`w-8 h-8 cursor-pointer ${i < newReview.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
-                        onClick={() => setNewReview({...newReview, rating: i + 1})}
+                        onClick={() => setNewReview({ ...newReview, rating: i + 1 })}
                       />
                     ))}
                   </div>
@@ -317,7 +319,7 @@ const BookPreview = () => {
                     className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full border border-gray-300 rounded-md p-3"
                     placeholder="Share your thoughts about this book..."
                     value={newReview.comment}
-                    onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
+                    onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
                   ></textarea>
                 </div>
                 <button type="submit" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none">

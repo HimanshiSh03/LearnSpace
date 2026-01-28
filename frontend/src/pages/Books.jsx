@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Search, BookOpen, Bookmark, Star, Filter } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 
 const Books = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -96,43 +97,46 @@ const Books = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       {/* Header */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-white dark:bg-gray-800 shadow-sm transition-colors duration-300">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">BookSpace</h1>
-              <p className="text-gray-600 mt-2">
+              <h1 className="text-3xl font-bold text-gray-800 dark:text-white">BookSpace</h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-2">
                 Explore curated books, notes, and learning resources
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-              <div className="relative w-full md:w-80">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search books or authors..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+            <div className="flex items-center gap-4 w-full md:w-auto">
+              <ThemeToggle />
+              <div className="flex flex-col sm:flex-row gap-4 w-full">
+                <div className="relative w-full md:w-80">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Search books or authors..."
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
 
-              <div className="relative w-full md:w-48">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <select
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none w-full bg-white"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative w-full md:w-48">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <select
+                    className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  >
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -141,45 +145,45 @@ const Books = () => {
 
       {/* Stats Bar */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-300">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex items-center">
-              <div className="bg-indigo-100 p-3 rounded-lg">
-                <BookOpen className="text-indigo-600 w-6 h-6" />
+              <div className="bg-indigo-100 dark:bg-indigo-900/50 p-3 rounded-lg">
+                <BookOpen className="text-indigo-600 dark:text-indigo-400 w-6 h-6" />
               </div>
               <div className="ml-4">
-                <p className="text-gray-500 text-sm">Total Books</p>
-                <p className="text-2xl font-bold">{books.length}</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">Total Books</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{books.length}</p>
               </div>
             </div>
 
             <div className="flex items-center">
-              <div className="bg-green-100 p-3 rounded-lg">
-                <Bookmark className="text-green-600 w-6 h-6" />
+              <div className="bg-green-100 dark:bg-green-900/50 p-3 rounded-lg">
+                <Bookmark className="text-green-600 dark:text-green-400 w-6 h-6" />
               </div>
               <div className="ml-4">
-                <p className="text-gray-500 text-sm">Categories</p>
-                <p className="text-2xl font-bold">{categories.length - 1}</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">Categories</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{categories.length - 1}</p>
               </div>
             </div>
 
             <div className="flex items-center">
-              <div className="bg-yellow-100 p-3 rounded-lg">
-                <Star className="text-yellow-600 w-6 h-6" />
+              <div className="bg-yellow-100 dark:bg-yellow-900/50 p-3 rounded-lg">
+                <Star className="text-yellow-600 dark:text-yellow-400 w-6 h-6" />
               </div>
               <div className="ml-4">
-                <p className="text-gray-500 text-sm">Avg Rating</p>
-                <p className="text-2xl font-bold">4.6</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">Avg Rating</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">4.6</p>
               </div>
             </div>
 
             <div className="flex items-center">
-              <div className="bg-purple-100 p-3 rounded-lg">
-                <BookOpen className="text-purple-600 w-6 h-6" />
+              <div className="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-lg">
+                <BookOpen className="text-purple-600 dark:text-purple-400 w-6 h-6" />
               </div>
               <div className="ml-4">
-                <p className="text-gray-500 text-sm">Pages</p>
-                <p className="text-2xl font-bold">2,007</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">Pages</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">2,007</p>
               </div>
             </div>
           </div>
@@ -188,7 +192,7 @@ const Books = () => {
 
       {/* Books Grid */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Recommended Books</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Recommended Books</h2>
 
         {filteredBooks.length === 0 ? (
           <div className="text-center py-12">
@@ -204,7 +208,7 @@ const Books = () => {
               <motion.div
                 key={book.id}
                 whileHover={{ y: -5 }}
-                className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg dark:shadow-gray-900/50"
               >
                 <div className="p-4 sm:p-6">
                   <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
@@ -216,25 +220,24 @@ const Books = () => {
                       />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white line-clamp-2">
                         {book.title}
                       </h3>
-                      <p className="text-gray-600 mt-1">{book.author}</p>
+                      <p className="text-gray-600 dark:text-gray-300 mt-1">{book.author}</p>
 
                       <div className="mt-2 flex items-center">
                         <div className="flex items-center">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-4 h-4 ${
-                                i < Math.floor(book.rating)
-                                  ? "text-yellow-400 fill-current"
-                                  : "text-gray-300"
-                              }`}
+                              className={`w-4 h-4 ${i < Math.floor(book.rating)
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                                }`}
                             />
                           ))}
                         </div>
-                        <span className="ml-2 text-sm text-gray-600">
+                        <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
                           {book.rating}
                         </span>
                       </div>
@@ -248,7 +251,7 @@ const Books = () => {
                         </span>
                       </div>
 
-                      <p className="mt-2 text-gray-600 text-sm line-clamp-3">
+                      <p className="mt-2 text-gray-600 dark:text-gray-300 text-sm line-clamp-3">
                         {book.description}
                       </p>
 
@@ -257,7 +260,7 @@ const Books = () => {
                           <Bookmark className="w-4 h-4 mr-1" />
                           Save
                         </button>
-                        <button 
+                        <button
                           onClick={() => navigate(`/book/${book.id}`)}
                           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer"
                         >
@@ -281,14 +284,14 @@ const Books = () => {
             <motion.div
               key={category.id}
               whileHover={{ scale: 1.05 }}
-              className="bg-white rounded-xl shadow-sm p-6 text-center cursor-pointer border border-gray-100 hover:border-indigo-300 transition-colors"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 text-center cursor-pointer border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-500 transition-colors"
               onClick={() => setSelectedCategory(category.id)}
             >
-              <div className="bg-indigo-100 w-12 h-12 rounded-lg flex items-center justify-center mx-auto">
-                <BookOpen className="text-indigo-600 w-6 h-6" />
+              <div className="bg-indigo-100 dark:bg-indigo-900/50 w-12 h-12 rounded-lg flex items-center justify-center mx-auto">
+                <BookOpen className="text-indigo-600 dark:text-indigo-400 w-6 h-6" />
               </div>
-              <h3 className="mt-3 font-medium text-gray-900">{category.name}</h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <h3 className="mt-3 font-medium text-gray-900 dark:text-white">{category.name}</h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 {books.filter((book) => book.category === category.id).length} books
               </p>
             </motion.div>

@@ -7,20 +7,60 @@ import Contributors from "./pages/Contributors";
 import About from "./pages/About";
 import Feedback from "./pages/Feedback";
 
-import Whiteboard from "./components/Whiteboard"; // Added Whiteboard import
-import TaskManager from "./components/TaskManager"; // Added TaskManager import
-import Kanban from "./Kanban"; // Added Kanban import
+import Whiteboard from "./components/Whiteboard";
+import TaskManager from "./components/TaskManager";
+import Kanban from "./Kanban";
 
-//  Route Guard using localStorage
+const SESSION_KEY = "app_session";
+
+const createMockSession = () => {
+  const session = {
+    token: crypto.randomUUID(),
+    user: {
+      id: "u_1021",
+      name: "Guest User",
+      role: "reader",
+    },
+    expiresAt: Date.now() + 1000 * 60 * 60 * 24, // 24h
+  };
+
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  return session;
+};
+
+const getSession = () => {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+
+    const session = JSON.parse(raw);
+    if (!session.expiresAt || Date.now() > session.expiresAt) {
+      localStorage.removeItem(SESSION_KEY);
+      return null;
+    }
+
+    return session;
+  } catch {
+    localStorage.removeItem(SESSION_KEY);
+    return null;
+  }
+};
+
 const ProtectedRoute = ({ children }) => {
-  // Always allow access to the kanban board (no login required)
+  let session = getSession();
+
+  if (!session) {
+    session = createMockSession();
+  }
+
+  if (!session) {
+    return <Navigate to="/" replace />;
+  }
+
   return children;
 };
 
 function App() {
-  // Set login flag automatically when app loads
-  localStorage.setItem("isLoggedIn", "true");
-
   return (
     <ThemeProvider>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -28,7 +68,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about-us" element={<About />} />
 
-          {/* Contributors route */}
           <Route
             path="/contributors"
             element={
@@ -38,7 +77,6 @@ function App() {
             }
           />
 
-          {/* About/Owner route */}
           <Route
             path="/owner"
             element={
@@ -48,7 +86,6 @@ function App() {
             }
           />
 
-          {/* Kanban route */}
           <Route
             path="/kanban"
             element={
@@ -58,7 +95,6 @@ function App() {
             }
           />
 
-          {/* Books route */}
           <Route
             path="/books"
             element={
@@ -68,7 +104,6 @@ function App() {
             }
           />
 
-          {/* Book Preview route */}
           <Route
             path="/book/:id"
             element={
@@ -78,7 +113,6 @@ function App() {
             }
           />
 
-          {/* Whiteboard route */}
           <Route
             path="/whiteboard"
             element={
@@ -88,7 +122,6 @@ function App() {
             }
           />
 
-          {/* TaskManager route */}
           <Route
             path="/tasks"
             element={
@@ -98,7 +131,6 @@ function App() {
             }
           />
 
-          {/* Feedback route */}
           <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </div>

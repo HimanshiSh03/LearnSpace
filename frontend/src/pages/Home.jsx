@@ -28,7 +28,6 @@ const NAV_ITEMS = [
   { name: "Kanban", path: "/kanban" },
   { name: "BookSpace", path: "/books" },
   { name: "Whiteboard", path: "/whiteboard" },
-  { name: "Contributors", path: "/contributors" },
   { name: "About Us", path: "/about-us" }
 ];
 

@@ -18,11 +18,20 @@ connectToDB();
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://learnspace03.netlify.app',
+  'https://frabjous-entremet-4e7e89.netlify.app',
+];
+
 const corsOptions = {
-  origin: 'https://frabjous-entremet-4e7e89.netlify.app',  // Exact URL (no trailing slash)
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 app.use(cors(corsOptions));
 

@@ -3,10 +3,8 @@ import { ThemeProvider } from "./context/ThemeContext";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
 import BookPreview from "./pages/BookPreview";
-import Contributors from "./pages/Contributors";
 import About from "./pages/About";
 import Feedback from "./pages/Feedback";
-
 import Whiteboard from "./components/Whiteboard";
 import TaskManager from "./components/TaskManager";
 import Kanban from "./Kanban";
@@ -68,15 +66,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about-us" element={<About />} />
 
-          <Route
-            path="/contributors"
-            element={
-              <ProtectedRoute>
-                <Contributors />
-              </ProtectedRoute>
-            }
-          />
-
+          
           <Route
             path="/owner"
             element={

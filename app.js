@@ -5,7 +5,6 @@ const cors = require('cors');
 
 const userRouter = require('./routes/user.routes');
 const taskRoutes = require("./routes/taskRoutes");
-const contributorRoutes = require("./routes/contributorRoutes");
 const cookieParser = require('cookie-parser');
 
 
@@ -18,11 +17,20 @@ connectToDB();
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://learnspace03.netlify.app',
+  'https://frabjous-entremet-4e7e89.netlify.app',
+];
+
 const corsOptions = {
-  origin: 'https://frabjous-entremet-4e7e89.netlify.app',  // Exact URL (no trailing slash)
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 app.use(cors(corsOptions));
 
@@ -40,7 +48,6 @@ app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
 // Routes
 app.use('/user', userRouter); // Authentication routes (register, login)
 app.use('/api/tasks', taskRoutes); // Task CRUD routes
-app.use('/api/contributors', contributorRoutes); // Contributor leaderboard routes
 
 // A simple test route to confirm the server starts
 app.get('/', (req, res) => {

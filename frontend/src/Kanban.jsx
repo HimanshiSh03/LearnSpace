@@ -181,8 +181,8 @@ const Kanban = () => {
         <h1 className="text-3xl font-bold">TASK MANAGER</h1>
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          <a href="/dashboard" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
-            Dashboard
+          <a href="/" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+           Home
           </a>
         </div>
       </div>

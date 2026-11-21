@@ -147,7 +147,7 @@ export default function Home() {
                 { name: "Kanban", path: "/kanban" },
                 { name: "BookSpace", path: "/books" },
                 { name: "Whiteboard", path: "/whiteboard" },
-                { name: "Contributors", path: "/contributors" },
+                
                 { name: "About Us", path: "/about-us" },
               ].map((item) => (
                 <Link
@@ -213,12 +213,7 @@ export default function Home() {
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.05 }}>
-              <Link
-                to="/contributors"
-                className="px-6 md:px-8 py-3 md:py-4 border border-white/60 text-white rounded-xl text-base md:text-lg font-semibold hover:bg-white/10 transition"
-              >
-                Meet the Community
-              </Link>
+             
             </motion.div>
           </div>
         </div>

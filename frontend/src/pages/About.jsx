@@ -92,7 +92,7 @@ const About = () => {
               { name: "Kanban", path: "/kanban" },
               { name: "BookSpace", path: "/books" },
               { name: "Whiteboard", path: "/whiteboard" },
-              { name: "Contributors", path: "/contributors" },
+            
               { name: "About Us", path: "/about-us" },
             ].map((item) => (
               <Link
@@ -139,7 +139,7 @@ const About = () => {
                 { name: "Kanban", path: "/kanban" },
                 { name: "BookSpace", path: "/books" },
                 { name: "Whiteboard", path: "/whiteboard" },
-                { name: "Contributors", path: "/contributors" },
+                
                 { name: "About Us", path: "/about-us" },
               ].map((item) => (
                 <Link
@@ -201,12 +201,7 @@ const About = () => {
             >
               Back to Home
             </Link>
-            <Link
-              to="/contributors"
-              className="bg-white border border-indigo-100 text-indigo-600 hover:bg-indigo-50 px-8 py-3.5 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1"
-            >
-              Contributors
-            </Link>
+            
           </motion.div>
         </motion.div>
       </section>
@@ -379,21 +374,7 @@ const About = () => {
               <span>View on GitHub</span>
             </a>
 
-            <Link
-              to="/contributors"
-              className="
-                inline-flex items-center gap-3
-                bg-indigo-600 hover:bg-indigo-700
-                text-white font-semibold
-                py-3 px-6 rounded-xl
-                transition-all duration-300
-                shadow-xl hover:shadow-2xl hover:shadow-indigo-500/30
-                transform hover:-translate-y-1
-              "
-            >
-              <Users className="w-5 h-5" />
-              <span>See Contributors</span>
-            </Link>
+            
           </motion.div>
         </div>
       </section>
